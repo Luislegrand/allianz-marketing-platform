@@ -1,1 +1,2 @@
-
+# Este arquivo existe para manter a pasta public/ no Git
+# Pastas vazias não são rastreadas pelo Git, então este arquivo garante que a pasta seja incluída no repositório
