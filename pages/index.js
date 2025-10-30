@@ -146,6 +146,17 @@ const AllianzPlatform = () => {
     setTasks(mockTasks);
   }, []);
 
+  const Logo = () => (
+    <svg className="h-8" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M15 5L25 35H20L18 28H12L10 35H5L15 5ZM15 12L13 23H17L15 12Z" fill="#ffa600"/>
+      <path d="M30 10H35V35H30V10Z" fill="#ffa600"/>
+      <path d="M40 10H45V35H40V10Z" fill="#ffa600"/>
+      <path d="M50 15C50 12 52 10 55 10C58 10 60 12 60 15V35H55V15H50V35H45V15C45 12 47 10 50 10Z" fill="#ffa600"/>
+      <path d="M65 28C65 31 67 33 70 33C73 33 75 31 75 28V17C75 14 73 12 70 12C67 12 65 14 65 17V28ZM60 28C60 34 64 38 70 38C76 38 80 34 80 28V17C80 11 76 7 70 7C64 7 60 11 60 17V28Z" fill="#ffa600"/>
+      <path d="M85 10H90V22L95 10H100L95 22L100 35H95L90 23V35H85V10Z" fill="#ffa600"/>
+      <path d="M105 35L115 10H110L107 20L104 10H99L109 35H105" fill="#ffa600"/>
+    </svg>
+  );
   const handleLogin = () => {
     if (loginEmail === users.agency.email && loginPassword === users.agency.password) {
       setCurrentUser(users.agency);
@@ -280,18 +291,6 @@ const AllianzPlatform = () => {
     }));
   };
 
-  const Logo = () => (
-    <svg className="h-8" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M15 5L25 35H20L18 28H12L10 35H5L15 5ZM15 12L13 23H17L15 12Z" fill="#ffa600"/>
-      <path d="M30 10H35V35H30V10Z" fill="#ffa600"/>
-      <path d="M40 10H45V35H40V10Z" fill="#ffa600"/>
-      <path d="M50 15C50 12 52 10 55 10C58 10 60 12 60 15V35H55V15H50V35H45V15C45 12 47 10 50 10Z" fill="#ffa600"/>
-      <path d="M65 28C65 31 67 33 70 33C73 33 75 31 75 28V17C75 14 73 12 70 12C67 12 65 14 65 17V28ZM60 28C60 34 64 38 70 38C76 38 80 34 80 28V17C80 11 76 7 70 7C64 7 60 11 60 17V28Z" fill="#ffa600"/>
-      <path d="M85 10H90V22L95 10H100L95 22L100 35H95L90 23V35H85V10Z" fill="#ffa600"/>
-      <path d="M105 35L115 10H110L107 20L104 10H99L109 35H105V" fill="#ffa600"/>
-    </svg>
-  );
-
   // LOGIN SCREEN
   if (view === 'login') {
     return (
@@ -351,217 +350,6 @@ const AllianzPlatform = () => {
       </div>
     );
   }
-
-  // CLIENT DASHBOARD
-  if (view === 'client-dashboard') {
-    const clientPosts = posts.filter(p => p.clientId === currentUser.id);
-    const pendingPosts = clientPosts.filter(p => p.status === 'pending');
-
-    return (
-      <div className="min-h-screen bg-black">
-        <div className="bg-gray-900 text-white p-6 shadow-lg border-b border-gray-800">
-          <div className="max-w-4xl mx-auto flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <Logo />
-              <div>
-                <h1 className="text-2xl font-bold">{currentUser.businessName}</h1>
-                <p className="text-gray-400">Painel do Cliente</p>
-              </div>
-            </div>
-            <button
-              onClick={() => {
-                setView('login');
-                setLoginEmail('');
-                setLoginPassword('');
-              }}
-              className="px-4 py-2 rounded-lg transition border border-gray-700 hover:bg-gray-800"
-            >
-              Sair
-            </button>
-          </div>
-        </div>
-
-        <div className="max-w-4xl mx-auto p-4">
-          {pendingPosts.length > 0 && (
-            <div className="bg-gray-900 border-l-4 p-4 mb-6 rounded-lg border border-gray-800" style={{ borderLeftColor: '#ffa600' }}>
-              <div className="flex items-center">
-                <Clock className="mr-2" size={20} style={{ color: '#ffa600' }} />
-                <p className="font-semibold text-white">
-                  Você tem {pendingPosts.length} post(s) aguardando aprovação
-                </p>
-              </div>
-            </div>
-          )}
-
-          <div className="space-y-4">
-            {clientPosts.map(post => (
-              <div key={post.id} className="bg-gray-900 rounded-xl shadow-md overflow-hidden border border-gray-800">
-                <img src={post.image} alt="Post" className="w-full h-64 object-cover" />
-
-                <div className="p-4">
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <p className="text-white mb-2">{post.caption}</p>
-                      <div className="flex items-center text-sm text-gray-400">
-                        <Calendar size={16} className="mr-1" />
-                        Publicação: {new Date(post.scheduledDate).toLocaleDateString('pt-BR')}
-                      </div>
-                    </div>
-
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      post.status === 'approved' ? 'bg-green-900 text-green-300' :
-                      post.status === 'pending' ? 'bg-yellow-900 text-yellow-300' :
-                      post.status === 'revision' ? 'bg-orange-900 text-orange-300' :
-                      'bg-red-900 text-red-300'
-                    }`}>
-                      {post.status === 'approved' ? 'Aprovado' :
-                       post.status === 'pending' ? 'Pendente' :
-                       post.status === 'revision' ? 'Em Revisão' :
-                       'Rejeitado'}
-                    </span>
-                  </div>
-
-                  {post.status === 'pending' && (
-                    <div className="space-y-3 mt-4 pt-4 border-t border-gray-800">
-                      <button
-                        onClick={() => {
-                          handlePostAction(post.id, 'approve');
-                          alert('Post aprovado! Será publicado automaticamente na data agendada.');
-                        }}
-                        className="w-full text-black py-3 rounded-lg font-semibold hover:opacity-90 transition flex items-center justify-center"
-                        style={{ background: '#ffa600' }}
-                      >
-                        <CheckCircle className="mr-2" size={20} />
-                        Aprovar Post
-                      </button>
-
-                      <button
-                        onClick={() => {
-                          const obs = window.prompt('Digite suas observações para revisão:');
-                          if (obs && obs.trim()) {
-                            handlePostAction(post.id, 'revise', obs);
-                            alert('Observações enviadas! A equipe fará os ajustes.');
-                          }
-                        }}
-                        className="w-full bg-gray-800 text-white py-3 rounded-lg font-semibold hover:bg-gray-700 transition flex items-center justify-center border border-gray-700"
-                      >
-                        <MessageSquare className="mr-2" size={20} />
-                        Solicitar Revisão
-                      </button>
-                    </div>
-                  )}
-
-                  {post.status === 'approved' && (
-                    <div className="mt-4 pt-4 border-t border-gray-800 bg-gray-800 p-3 rounded-lg">
-                      <p className="text-sm flex items-center" style={{ color: '#ffa600' }}>
-                        <CheckCircle className="mr-2" size={18} />
-                        Este post será publicado automaticamente no Instagram em {new Date(post.scheduledDate).toLocaleDateString('pt-BR')}
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-6 bg-gray-900 rounded-xl shadow-md p-6 border border-gray-800">
-            <h2 className="text-xl font-bold text-white mb-4 flex items-center">
-              <BarChart3 className="mr-2" size={24} style={{ color: '#ffa600' }} />
-              Suas Métricas
-            </h2>
-
-            <div className="space-y-4">
-              <div className="bg-gray-800 p-4 rounded-lg border-l-4" style={{ borderLeftColor: '#ffa600' }}>
-                <h3 className="font-semibold text-white mb-3 flex items-center">
-                  <Instagram className="mr-2" size={20} style={{ color: '#ffa600' }} />
-                  Instagram Orgânico
-                </h3>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <p className="text-xs text-gray-400 mb-1">Alcance</p>
-                    <p className="text-xl font-bold text-white">2.803</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400 mb-1">Visitas no Perfil</p>
-                    <p className="text-xl font-bold text-white">101</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400 mb-1">Novos Seguidores</p>
-                    <p className="text-xl font-bold text-white">+9</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400 mb-1">Engajamento</p>
-                    <p className="text-xl font-bold text-white">4.2%</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-gray-800 p-4 rounded-lg border-l-4 border-gray-700">
-                <h3 className="font-semibold text-white mb-3 flex items-center">
-                  <DollarSign className="mr-2" size={20} style={{ color: '#ffa600' }} />
-                  Campanha Meta Ads
-                </h3>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <p className="text-xs text-gray-400 mb-1">Investido</p>
-                    <p className="text-xl font-bold text-white">R$ 209,06</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400 mb-1">Alcance</p>
-                    <p className="text-xl font-bold text-white">7.050</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400 mb-1">Cliques</p>
-                    <p className="text-xl font-bold text-white">184</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400 mb-1">Conversas</p>
-                    <p className="text-xl font-bold text-white">27</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400 mb-1">Custo/Conversa</p>
-                    <p className="text-xl font-bold text-white">R$ 7,74</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400 mb-1">Taxa de Conversão</p>
-                    <p className="text-xl font-bold text-white">14.7%</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-gray-800 p-4 rounded-lg border-l-4 border-gray-700">
-                <h3 className="font-semibold text-white mb-3 flex items-center">
-                  <TrendingUp className="mr-2" size={20} style={{ color: '#ffa600' }} />
-                  Resumo Geral
-                </h3>
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <p className="text-xs text-gray-400 mb-1">Alcance Total</p>
-                    <p className="text-xl font-bold text-white">9.853</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400 mb-1">Total de Interações</p>
-                    <p className="text-xl font-bold text-white">211</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400 mb-1">ROI Estimado</p>
-                    <p className="text-xl font-bold" style={{ color: '#ffa600' }}>+342%</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400 mb-1">Crescimento</p>
-                    <p className="text-xl font-bold" style={{ color: '#ffa600' }}>+23%</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // AGENCY DASHBOARD - PARTE 1 - CONTINUA NO PRÓXIMO ARTIFACT
-// CONTINUAÇÃO DO ARQUIVO - ADICIONE ESTE CÓDIGO ANTES DO "return null;" DA PARTE 1
 
   // AGENCY DASHBOARD
   if (view === 'agency-dashboard') {
@@ -895,9 +683,6 @@ const AllianzPlatform = () => {
     );
   }
 
-  // CONTINUA NA PARTE 3...
-// CONTINUAÇÃO - ADICIONE APÓS A PARTE 2
-
   // AGENCY CLIENTS
   if (view === 'agency-clients') {
     return (
@@ -1196,9 +981,6 @@ const AllianzPlatform = () => {
       </div>
     );
   }
-
-  // AGENCY TASKS - CONTINUA NO PRÓXIMO...
-// CONTINUAÇÃO E FINALIZAÇÃO - ADICIONE APÓS A PARTE 3
 
   // AGENCY TASKS
   if (view === 'agency-tasks') {
@@ -1567,6 +1349,214 @@ const AllianzPlatform = () => {
             </div>
           </div>
         )}
+      </div>
+    );
+  }
+
+  // CLIENT DASHBOARD
+  if (view === 'client-dashboard') {
+    const clientPosts = posts.filter(p => p.clientId === currentUser.id);
+    const pendingPosts = clientPosts.filter(p => p.status === 'pending');
+
+    return (
+      <div className="min-h-screen bg-black">
+        <div className="bg-gray-900 text-white p-6 shadow-lg border-b border-gray-800">
+          <div className="max-w-4xl mx-auto flex justify-between items-center">
+            <div className="flex items-center gap-3">
+              <Logo />
+              <div>
+                <h1 className="text-2xl font-bold">{currentUser.businessName}</h1>
+                <p className="text-gray-400">Painel do Cliente</p>
+              </div>
+            </div>
+            <button
+              onClick={() => {
+                setView('login');
+                setLoginEmail('');
+                setLoginPassword('');
+              }}
+              className="px-4 py-2 rounded-lg transition border border-gray-700 hover:bg-gray-800"
+            >
+              Sair
+            </button>
+          </div>
+        </div>
+
+        <div className="max-w-4xl mx-auto p-4">
+          {pendingPosts.length > 0 && (
+            <div className="bg-gray-900 border-l-4 p-4 mb-6 rounded-lg border border-gray-800" style={{ borderLeftColor: '#ffa600' }}>
+              <div className="flex items-center">
+                <Clock className="mr-2" size={20} style={{ color: '#ffa600' }} />
+                <p className="font-semibold text-white">
+                  Você tem {pendingPosts.length} post(s) aguardando aprovação
+                </p>
+              </div>
+            </div>
+          )}
+
+          <div className="space-y-4">
+            {clientPosts.map(post => (
+              <div key={post.id} className="bg-gray-900 rounded-xl shadow-md overflow-hidden border border-gray-800">
+                <img src={post.image} alt="Post" className="w-full h-64 object-cover" />
+
+                <div className="p-4">
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <p className="text-white mb-2">{post.caption}</p>
+                      <div className="flex items-center text-sm text-gray-400">
+                        <Calendar size={16} className="mr-1" />
+                        Publicação: {new Date(post.scheduledDate).toLocaleDateString('pt-BR')}
+                      </div>
+                    </div>
+
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      post.status === 'approved' ? 'bg-green-900 text-green-300' :
+                      post.status === 'pending' ? 'bg-yellow-900 text-yellow-300' :
+                      post.status === 'revision' ? 'bg-orange-900 text-orange-300' :
+                      'bg-red-900 text-red-300'
+                    }`}>
+                      {post.status === 'approved' ? 'Aprovado' :
+                       post.status === 'pending' ? 'Pendente' :
+                       post.status === 'revision' ? 'Em Revisão' :
+                       'Rejeitado'}
+                    </span>
+                  </div>
+
+                  {post.status === 'pending' && (
+                    <div className="space-y-3 mt-4 pt-4 border-t border-gray-800">
+                      <button
+                        onClick={() => {
+                          handlePostAction(post.id, 'approve');
+                          alert('Post aprovado! Será publicado automaticamente na data agendada.');
+                        }}
+                        className="w-full text-black py-3 rounded-lg font-semibold hover:opacity-90 transition flex items-center justify-center"
+                        style={{ background: '#ffa600' }}
+                      >
+                        <CheckCircle className="mr-2" size={20} />
+                        Aprovar Post
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          const obs = window.prompt('Digite suas observações para revisão:');
+                          if (obs && obs.trim()) {
+                            handlePostAction(post.id, 'revise', obs);
+                            alert('Observações enviadas! A equipe fará os ajustes.');
+                          }
+                        }}
+                        className="w-full bg-gray-800 text-white py-3 rounded-lg font-semibold hover:bg-gray-700 transition flex items-center justify-center border border-gray-700"
+                      >
+                        <MessageSquare className="mr-2" size={20} />
+                        Solicitar Revisão
+                      </button>
+                    </div>
+                  )}
+
+                  {post.status === 'approved' && (
+                    <div className="mt-4 pt-4 border-t border-gray-800 bg-gray-800 p-3 rounded-lg">
+                      <p className="text-sm flex items-center" style={{ color: '#ffa600' }}>
+                        <CheckCircle className="mr-2" size={18} />
+                        Este post será publicado automaticamente no Instagram em {new Date(post.scheduledDate).toLocaleDateString('pt-BR')}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 bg-gray-900 rounded-xl shadow-md p-6 border border-gray-800">
+            <h2 className="text-xl font-bold text-white mb-4 flex items-center">
+              <BarChart3 className="mr-2" size={24} style={{ color: '#ffa600' }} />
+              Suas Métricas
+            </h2>
+
+            <div className="space-y-4">
+              <div className="bg-gray-800 p-4 rounded-lg border-l-4" style={{ borderLeftColor: '#ffa600' }}>
+                <h3 className="font-semibold text-white mb-3 flex items-center">
+                  <Instagram className="mr-2" size={20} style={{ color: '#ffa600' }} />
+                  Instagram Orgânico
+                </h3>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <p className="text-xs text-gray-400 mb-1">Alcance</p>
+                    <p className="text-xl font-bold text-white">2.803</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400 mb-1">Visitas no Perfil</p>
+                    <p className="text-xl font-bold text-white">101</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400 mb-1">Novos Seguidores</p>
+                    <p className="text-xl font-bold text-white">+9</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400 mb-1">Engajamento</p>
+                    <p className="text-xl font-bold text-white">4.2%</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gray-800 p-4 rounded-lg border-l-4 border-gray-700">
+                <h3 className="font-semibold text-white mb-3 flex items-center">
+                  <DollarSign className="mr-2" size={20} style={{ color: '#ffa600' }} />
+                  Campanha Meta Ads
+                </h3>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <p className="text-xs text-gray-400 mb-1">Investido</p>
+                    <p className="text-xl font-bold text-white">R$ 209,06</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400 mb-1">Alcance</p>
+                    <p className="text-xl font-bold text-white">7.050</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400 mb-1">Cliques</p>
+                    <p className="text-xl font-bold text-white">184</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400 mb-1">Conversas</p>
+                    <p className="text-xl font-bold text-white">27</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400 mb-1">Custo/Conversa</p>
+                    <p className="text-xl font-bold text-white">R$ 7,74</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400 mb-1">Taxa de Conversão</p>
+                    <p className="text-xl font-bold text-white">14.7%</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-gray-800 p-4 rounded-lg border-l-4 border-gray-700">
+                <h3 className="font-semibold text-white mb-3 flex items-center">
+                  <TrendingUp className="mr-2" size={20} style={{ color: '#ffa600' }} />
+                  Resumo Geral
+                </h3>
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <p className="text-xs text-gray-400 mb-1">Alcance Total</p>
+                    <p className="text-xl font-bold text-white">9.853</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400 mb-1">Total de Interações</p>
+                    <p className="text-xl font-bold text-white">211</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400 mb-1">ROI Estimado</p>
+                    <p className="text-xl font-bold" style={{ color: '#ffa600' }}>+342%</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-gray-400 mb-1">Crescimento</p>
+                    <p className="text-xl font-bold" style={{ color: '#ffa600' }}>+23%</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
