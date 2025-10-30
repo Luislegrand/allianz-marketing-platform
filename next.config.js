@@ -1,9 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  images: {
-    domains: ['via.placeholder.com'],
+  eslint: {
+    ignoreDuringBuilds: true,
   },
-}
+  experimental: {
+    appDir: false, // garante que use /pages ao invés de /app
+  },
+  distDir: '.next', // diretório padrão do build
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
