@@ -292,17 +292,21 @@ const AllianzPlatform = () => {
   };
 
   // LOGIN SCREEN
-  if (view === 'login') {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center p-4">
-        <div className="bg-gray-900 rounded-2xl shadow-2xl p-8 w-full max-w-md border border-gray-800">
-          <div className="text-center mb-8">
-            <div className="flex justify-center mb-4">
-              <Logo />
-            </div>
-            <h1 className="text-3xl font-bold text-white">Allianz Marketing</h1>
-            <p className="text-gray-400 mt-2">Gestão de Conteúdo e Campanhas</p>
+if (view === 'login') {
+  return (
+    <div className="min-h-screen bg-black flex items-center justify-center p-4">
+      <div className="bg-gray-900 rounded-2xl shadow-2xl p-8 w-full max-w-md border border-gray-800">
+        <div className="text-center mb-8">
+          <div className="flex justify-center mb-4">
+            <img 
+              src="/logo.png" 
+              alt="Logo" 
+              className="h-16 w-auto"
+            />
           </div>
+          <h1 className="text-3xl font-bold text-white">Allianz Marketing</h1>
+          <p className="text-gray-400 mt-2">Gestão de Conteúdo e Campanhas</p>
+        </div>
 
           <div className="space-y-4">
             <div>
