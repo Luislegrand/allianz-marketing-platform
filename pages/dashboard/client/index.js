@@ -148,32 +148,44 @@ export default function ClientDashboard() {
           )}
         </div>
 
-        {/* Métricas do cliente (mock) */}
-        <div className="mt-6 bg-gray-900 rounded-xl shadow-md p-6 border border-gray-800">
-          <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-            <span className="inline-block w-2 h-2 rounded-full" style={{ background: '#ffa600' }} />
-            Suas Métricas
-          </h2>
+        {/* Métricas do cliente */}
+<div className="mt-6 bg-gray-900 rounded-xl shadow-md p-6 border border-gray-800">
+  <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
+    <span className="inline-block w-2 h-2 rounded-full" style={{ background: '#ffa600' }} />
+    Suas Métricas
+  </h2>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-gray-800 p-4 rounded-lg border-l-4" style={{ borderColor: '#ffa600' }}>
-              <p className="text-gray-400 text-xs mb-1">Alcance</p>
-              <p className="text-2xl text-white font-bold">2.803</p>
-            </div>
-            <div className="bg-gray-800 p-4 rounded-lg border-l-4 border-gray-700">
-              <p className="text-gray-400 text-xs mb-1">Visitas no Perfil</p>
-              <p className="text-2xl text-white font-bold">101</p>
-            </div>
-            <div className="bg-gray-800 p-4 rounded-lg border-l-4 border-gray-700">
-              <p className="text-gray-400 text-xs mb-1">Novos Seguidores</p>
-              <p className="text-2xl text-white font-bold">+9</p>
-            </div>
-            <div className="bg-gray-800 p-4 rounded-lg border-l-4 border-gray-700">
-              <p className="text-gray-400 text-xs mb-1">Campanhas</p>
-              <p className="text-2xl text-white font-bold">27</p>
-            </div>
-          </div>
-        </div>
+  <div className="grid grid-cols-2 gap-4">
+    <div className="bg-gray-800 p-4 rounded-lg border-l-4" style={{ borderColor: '#ffa600' }}>
+      <p className="text-gray-400 text-xs mb-1">Alcance</p>
+      <p className="text-2xl text-white font-bold">
+        {currentUser?.metrics?.reach ?? 0}
+      </p>
+    </div>
+
+    <div className="bg-gray-800 p-4 rounded-lg border-l-4 border-gray-700">
+      <p className="text-gray-400 text-xs mb-1">Visitas no Perfil</p>
+      <p className="text-2xl text-white font-bold">
+        {currentUser?.metrics?.profileVisits ?? 0}
+      </p>
+    </div>
+
+    <div className="bg-gray-800 p-4 rounded-lg border-l-4 border-gray-700">
+      <p className="text-gray-400 text-xs mb-1">Novos Seguidores</p>
+      <p className="text-2xl text-white font-bold">
+        {currentUser?.metrics?.followers ?? 0}
+      </p>
+    </div>
+
+    <div className="bg-gray-800 p-4 rounded-lg border-l-4 border-gray-700">
+      <p className="text-gray-400 text-xs mb-1">Campanhas</p>
+      <p className="text-2xl text-white font-bold">
+        {currentUser?.metrics?.campaigns ?? 0}
+      </p>
+    </div>
+  </div>
+</div>
+        
       </main>
 
       {/* MODAL DE IMAGEM */}
