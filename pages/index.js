@@ -1,3 +1,4 @@
+// pages/index.js
 import { useState, useEffect } from 'react';
 import {
   Calendar,
@@ -16,10 +17,13 @@ import {
   Plus,
   Edit,
   Tag,
-  AlertCircle
+  AlertCircle,
 } from 'lucide-react';
 
 const AllianzPlatform = () => {
+  // ===========================
+  // STATES PRINCIPAIS
+  // ===========================
   const [currentUser, setCurrentUser] = useState(null);
   const [view, setView] = useState('login');
   const [posts, setPosts] = useState([]);
@@ -47,7 +51,7 @@ const AllianzPlatform = () => {
     paymentDay: '',
     goals: '',
     instagram: '',
-    password: ''
+    password: '',
   });
 
   const [newTask, setNewTask] = useState({
@@ -58,33 +62,32 @@ const AllianzPlatform = () => {
     priority: 'medium',
     status: 'todo',
     dueDate: '',
-    checklist: []
+    checklist: [],
   });
 
-  // Usuários mockados
+  // ===========================
+  // MOCKS
+  // ===========================
   const users = {
     agency: {
       id: 1,
       email: 'agencia@allianz.com',
       password: '123',
       role: 'agency',
-      name: 'Allianz Marketing'
-    }
+      name: 'Allianz Marketing',
+    },
   };
 
-  // Serviços disponíveis
   const services = [
     'Gestão de Redes Sociais',
     'Tráfego Pago',
     'Design',
     'Edição de Vídeos',
-    'Desenvolvimento de Site'
+    'Desenvolvimento de Site',
   ];
 
-  // Equipe mockada
   const teamMembers = ['Social Media 1', 'Social Media 2', 'Designer', 'Editor de Vídeos'];
 
-  // Posts mockados
   const mockPosts = [
     {
       id: 1,
@@ -95,7 +98,7 @@ const AllianzPlatform = () => {
       scheduledDate: '2025-10-30',
       status: 'pending',
       createdAt: '2025-10-28T10:30:00',
-      observations: null
+      observations: null,
     },
     {
       id: 2,
@@ -106,11 +109,10 @@ const AllianzPlatform = () => {
       scheduledDate: '2025-10-31',
       status: 'approved',
       createdAt: '2025-10-27T14:20:00',
-      observations: null
-    }
+      observations: null,
+    },
   ];
 
-  // Clientes mockados
   const mockClients = [
     {
       id: 2,
@@ -129,11 +131,10 @@ const AllianzPlatform = () => {
       goals: 'Aumentar vendas em 30% nos próximos 3 meses',
       instagram: '@lojaxyz',
       status: 'active',
-      createdAt: '2025-01-15'
-    }
+      createdAt: '2025-01-15',
+    },
   ];
 
-  // Tarefas mockadas
   const mockTasks = [
     {
       id: 1,
@@ -149,8 +150,8 @@ const AllianzPlatform = () => {
       checklist: [
         { id: 1, text: 'Brainstorm de ideias', completed: true },
         { id: 2, text: 'Criar artes', completed: false },
-        { id: 3, text: 'Escrever legendas', completed: false }
-      ]
+        { id: 3, text: 'Escrever legendas', completed: false },
+      ],
     },
     {
       id: 2,
@@ -163,81 +164,34 @@ const AllianzPlatform = () => {
       status: 'doing',
       dueDate: '2025-11-02',
       createdAt: '2025-10-27',
-      checklist: []
-    }
+      checklist: [],
+    },
   ];
 
-  // Carrega mocks ao iniciar
+  // ===========================
+  // EFFECT PARA CARREGAR MOCKS
+  // ===========================
   useEffect(() => {
     setPosts(mockPosts);
     setClients(mockClients);
     setTasks(mockTasks);
   }, []);
 
-  // ========================
-  // LOGO COMPONENT
-  // ========================
+  // ===========================
+  // COMPONENTE DE LOGO (usa /public/logo.png)
+  // ===========================
   const Logo = () => (
-    <svg className="h-8" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M15 5L25 35H20L18 28H12L10 35H5L15 5ZM15 12L13 23H17L15 12Z" fill="#ffa600" />
-      <path d="M30 10H35V35H30V10Z" fill="#ffa600" />
-      <path d="M40 10H45V35H40V10Z" fill="#ffa600" />
-      <path
-        d="M50 15C50 12 52 10 55 10C58 10 60 12 60 15V35H55V15H50V35H45V15C45 12 47 10 50 10Z"
-        fill="#ffa600"
-      />
-      <path
-        d="M65 28C65 31 67 33 70 33C73 33 75 31 75 28V17C75 14 73 12 70 12C67 12 65 14 65 17V28ZM60 28C60 34 64 38 70 38C76 38 80 34 80 28V17C80 11 76 7 70 7C64 7 60 11 60 17V28Z"
-        fill="#ffa600"
-      />
-      <path
-        d="M85 10H90V22L95 10H100L95 22L100 35H95L90 23V35H85V10Z"
-        fill="#ffa600"
-      />
-      <path
-        d="M105 35L115 10H110L107 20L104 10H99L109 35H105"
-        fill="#ffa600"
-      />
-    </svg>
+    <img
+      src="/logo.png"
+      alt="Allianz Marketing"
+      className="h-8 w-auto object-contain"
+      loading="lazy"
+    />
   );
 
-  // ========================
-  // FUNÇÃO DE UPLOAD (Cloudinary)
-  // ========================
-  const handleUploadImage = async (file) => {
-    try {
-      const formData = new FormData();
-      // nome do campo: "file"
-      formData.append('file', file);
-      // preset que você criou no Cloudinary
-      formData.append('upload_preset', 'allianz_unsigned');
-      // opcional, mas vamos mandar também
-      formData.append('cloud_name', 'dbi6emnvr');
-
-      const res = await fetch('https://api.cloudinary.com/v1_1/dbi6emnvr/image/upload', {
-        method: 'POST',
-        body: formData
-      });
-
-      const data = await res.json();
-
-      if (data.secure_url) {
-        return data.secure_url;
-      } else {
-        console.error('Erro ao enviar para Cloudinary:', data);
-        alert('Erro ao enviar imagem. Verifique o preset no Cloudinary.');
-        return null;
-      }
-    } catch (error) {
-      console.error('Erro no upload:', error);
-      alert('Falha ao enviar imagem para o servidor.');
-      return null;
-    }
-  };
-
-  // ========================
+  // ===========================
   // LOGIN
-  // ========================
+  // ===========================
   const handleLogin = () => {
     if (loginEmail === users.agency.email && loginPassword === users.agency.password) {
       setCurrentUser(users.agency);
@@ -253,9 +207,9 @@ const AllianzPlatform = () => {
     }
   };
 
-  // ========================
-  // AÇÕES DE POST (cliente)
-  // ========================
+  // ===========================
+  // APROVAÇÃO / REVISÃO DE POSTS
+  // ===========================
   const handlePostAction = (postId, action, observation = null) => {
     setPosts(
       posts.map((post) => {
@@ -271,12 +225,43 @@ const AllianzPlatform = () => {
     );
   };
 
-  // ========================
-  // CRIAR POST (agência)
-  // ========================
+  // ===========================
+  // FUNÇÃO DE UPLOAD (Cloudinary)
+  // ===========================
+  const handleUploadImage = async (file) => {
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'allianz_unsigned'); // seu preset
+      formData.append('cloud_name', 'dbi6emnvr'); // seu cloud name
+
+      const res = await fetch('https://api.cloudinary.com/v1_1/dbi6emnvr/image/upload', {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (data.secure_url) {
+        return data.secure_url;
+      } else {
+        console.error('Erro no upload:', data);
+        alert('Erro ao enviar imagem. Tente novamente.');
+        return null;
+      }
+    } catch (error) {
+      console.error('Erro ao enviar imagem:', error);
+      alert('Falha no upload da imagem.');
+      return null;
+    }
+  };
+
+  // ===========================
+  // CRIAR POST (usa imagem do Cloudinary)
+  // ===========================
   const handleCreatePost = () => {
-    if (!newPost.caption || !newPost.scheduledDate || !selectedClient) {
-      alert('Preencha todos os campos');
+    if (!newPost.caption || !newPost.scheduledDate || !selectedClient || !newPost.image) {
+      alert('Preencha todos os campos (incluindo a imagem)');
       return;
     }
 
@@ -285,12 +270,11 @@ const AllianzPlatform = () => {
       clientId: selectedClient.id,
       clientName: selectedClient.businessName,
       caption: newPost.caption,
-      // se veio do cloudinary, usa. senão, usa placeholder
-      image: newPost.image || 'https://via.placeholder.com/400x400/A8E6CF/ffffff?text=Novo+Post',
+      image: newPost.image, // ✅ agora usa a imagem enviada
       scheduledDate: newPost.scheduledDate,
       status: 'pending',
       createdAt: new Date().toISOString(),
-      observations: null
+      observations: null,
     };
 
     setPosts([post, ...posts]);
@@ -298,9 +282,9 @@ const AllianzPlatform = () => {
     alert('Post enviado para aprovação! Notificação enviada ao cliente.');
   };
 
-  // ========================
+  // ===========================
   // CRIAR CLIENTE
-  // ========================
+  // ===========================
   const handleCreateClient = () => {
     if (!newClient.name || !newClient.businessName || !newClient.email || !newClient.password) {
       alert('Preencha os campos obrigatórios');
@@ -312,7 +296,7 @@ const AllianzPlatform = () => {
       ...newClient,
       role: 'client',
       status: 'active',
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
     };
 
     setClients([...clients, client]);
@@ -333,26 +317,26 @@ const AllianzPlatform = () => {
       paymentDay: '',
       goals: '',
       instagram: '',
-      password: ''
+      password: '',
     });
   };
 
-  // ========================
+  // ===========================
   // CRIAR TAREFA
-  // ========================
+  // ===========================
   const handleCreateTask = () => {
     if (!newTask.title || !newTask.clientId || !newTask.assignedTo) {
       alert('Preencha os campos obrigatórios');
       return;
     }
 
-    const client = clients.find((c) => c.id === parseInt(newTask.clientId, 10));
+    const client = clients.find((c) => c.id === parseInt(newTask.clientId));
     const task = {
       id: tasks.length + 1,
       ...newTask,
       clientName: client?.businessName || '',
       createdAt: new Date().toISOString(),
-      checklist: []
+      checklist: [],
     };
 
     setTasks([...tasks, task]);
@@ -365,20 +349,17 @@ const AllianzPlatform = () => {
       priority: 'medium',
       status: 'todo',
       dueDate: '',
-      checklist: []
+      checklist: [],
     });
   };
 
-  // ========================
-  // ATUALIZA STATUS DA TAREFA (kanban)
-  // ========================
+  // ===========================
+  // ATUALIZAR STATUS DE TAREFA (KANBAN)
+  // ===========================
   const updateTaskStatus = (taskId, newStatus) => {
     setTasks(tasks.map((task) => (task.id === taskId ? { ...task, status: newStatus } : task)));
   };
 
-  // ========================
-  // TOGGLE CHECKLIST
-  // ========================
   const toggleChecklistItem = (taskId, checklistId) => {
     setTasks(
       tasks.map((task) => {
@@ -387,7 +368,7 @@ const AllianzPlatform = () => {
             ...task,
             checklist: task.checklist.map((item) =>
               item.id === checklistId ? { ...item, completed: !item.completed } : item
-            )
+            ),
           };
         }
         return task;
@@ -395,9 +376,9 @@ const AllianzPlatform = () => {
     );
   };
 
-  // ========================
+  // ===========================
   // LOGIN SCREEN
-  // ========================
+  // ===========================
   if (view === 'login') {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center p-4">
@@ -457,9 +438,9 @@ const AllianzPlatform = () => {
     );
   }
 
-  // ========================
-  // AGENCY DASHBOARD
-  // ========================
+  // ===========================
+  // AGENCY DASHBOARD (POSTS)
+  // ===========================
   if (view === 'agency-dashboard') {
     return (
       <div className="min-h-screen bg-black">
@@ -535,8 +516,8 @@ const AllianzPlatform = () => {
                 <select
                   value={selectedClient?.id || ''}
                   onChange={(e) => {
-                    const client = clients.find((c) => c.id === parseInt(e.target.value, 10));
-                    setSelectedClient(client || null);
+                    const client = clients.find((c) => c.id === parseInt(e.target.value));
+                    setSelectedClient(client);
                   }}
                   className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                 >
@@ -561,8 +542,8 @@ const AllianzPlatform = () => {
                 />
               </div>
 
+              {/* Data + Imagem */}
               <div className="grid grid-cols-2 gap-4">
-                {/* Data */}
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     Data de Publicação
@@ -575,14 +556,13 @@ const AllianzPlatform = () => {
                   />
                 </div>
 
-                {/* Imagem */}
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">Imagem</label>
                   <input
                     type="file"
                     accept="image/*"
                     onChange={async (e) => {
-                      const file = e.target.files?.[0];
+                      const file = e.target.files[0];
                       if (file) {
                         const imageUrl = await handleUploadImage(file);
                         if (imageUrl) {
@@ -592,15 +572,14 @@ const AllianzPlatform = () => {
                     }}
                     className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                   />
-
-                  {/* Preview */}
+                  {/* Preview da imagem */}
                   {newPost.image && (
-                    <div className="mt-3">
-                      <p className="text-xs text-gray-400 mb-1">Pré-visualização:</p>
+                    <div className="mt-2">
+                      <p className="text-xs text-gray-400 mb-1">Preview:</p>
                       <img
                         src={newPost.image}
-                        alt="Prévia do post"
-                        className="w-32 h-32 object-cover rounded-lg border border-gray-700"
+                        alt="Preview"
+                        className="h-24 rounded-lg object-cover border border-gray-700"
                       />
                     </div>
                   )}
@@ -631,7 +610,7 @@ const AllianzPlatform = () => {
                     <img
                       src={post.image}
                       alt="Post"
-                      className="w-24 h-24 rounded-lg object-cover bg-gray-900"
+                      className="w-24 h-24 rounded-lg object-cover bg-gray-950"
                     />
 
                     <div className="flex-1">
@@ -687,9 +666,6 @@ const AllianzPlatform = () => {
                   </div>
                 </div>
               ))}
-              {posts.length === 0 && (
-                <p className="text-gray-400 text-sm">Nenhum post criado ainda.</p>
-              )}
             </div>
           </div>
         </div>
@@ -697,13 +673,13 @@ const AllianzPlatform = () => {
     );
   }
 
-  // ========================
+  // ===========================
   // AGENCY METRICS
-  // ========================
+  // ===========================
   if (view === 'agency-metrics') {
     const mockMetrics = {
       instagram: { reach: 2803, profileVisits: 101, followers: 9, engagement: 4.2 },
-      metaAds: { invested: 209.06, reach: 7050, clicks: 184, conversations: 27, costPerConversation: 7.74 }
+      metaAds: { invested: 209.06, reach: 7050, clicks: 184, conversations: 27, costPerConversation: 7.74 },
     };
 
     return (
@@ -764,9 +740,9 @@ const AllianzPlatform = () => {
           </div>
         </div>
 
-        {/* Content */}
+        {/* Conteúdo */}
         <div className="max-w-7xl mx-auto p-6">
-          {/* Selecionar Cliente */}
+          {/* seleção de cliente */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-300 mb-2">Selecionar Cliente</label>
             <select className="px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500">
@@ -884,9 +860,9 @@ const AllianzPlatform = () => {
     );
   }
 
-  // ========================
+  // ===========================
   // AGENCY CLIENTS
-  // ========================
+  // ===========================
   if (view === 'agency-clients') {
     return (
       <div className="min-h-screen bg-black">
@@ -946,7 +922,7 @@ const AllianzPlatform = () => {
           </div>
         </div>
 
-        {/* Content */}
+        {/* Conteúdo */}
         <div className="max-w-7xl mx-auto p-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold text-white">Clientes ({clients.length})</h2>
@@ -1008,9 +984,6 @@ const AllianzPlatform = () => {
                 </div>
               </div>
             ))}
-            {clients.length === 0 && (
-              <p className="text-gray-400 text-sm">Nenhum cliente cadastrado ainda.</p>
-            )}
           </div>
         </div>
 
@@ -1050,9 +1023,7 @@ const AllianzPlatform = () => {
                     <input
                       type="text"
                       value={newClient.businessName}
-                      onChange={(e) =>
-                        setNewClient({ ...newClient, businessName: e.target.value })
-                      }
+                      onChange={(e) => setNewClient({ ...newClient, businessName: e.target.value })}
                       className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                       placeholder="Loja ABC"
                     />
@@ -1061,9 +1032,7 @@ const AllianzPlatform = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Email *
-                    </label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Email *</label>
                     <input
                       type="email"
                       value={newClient.email}
@@ -1141,12 +1110,12 @@ const AllianzPlatform = () => {
                             if (e.target.checked) {
                               setNewClient({
                                 ...newClient,
-                                services: [...newClient.services, service]
+                                services: [...newClient.services, service],
                               });
                             } else {
                               setNewClient({
                                 ...newClient,
-                                services: newClient.services.filter((s) => s !== service)
+                                services: newClient.services.filter((s) => s !== service),
                               });
                             }
                           }}
@@ -1247,9 +1216,9 @@ const AllianzPlatform = () => {
     );
   }
 
-  // ========================
+  // ===========================
   // AGENCY TASKS
-  // ========================
+  // ===========================
   if (view === 'agency-tasks') {
     const todoTasks = tasks.filter((t) => t.status === 'todo');
     const doingTasks = tasks.filter((t) => t.status === 'doing');
@@ -1323,7 +1292,7 @@ const AllianzPlatform = () => {
                   className="h-2 rounded-full transition-all"
                   style={{
                     width: `${(completedItems / task.checklist.length) * 100}%`,
-                    background: '#ffa600'
+                    background: '#ffa600',
                   }}
                 />
               </div>
@@ -1432,7 +1401,7 @@ const AllianzPlatform = () => {
           </div>
         </div>
 
-        {/* Content */}
+        {/* Conteúdo */}
         <div className="max-w-7xl mx-auto p-6">
           <div className="flex justify-between items-center mb-6">
             <div className="flex gap-4">
@@ -1472,12 +1441,7 @@ const AllianzPlatform = () => {
 
           {taskView === 'kanban' ? (
             <div className="grid grid-cols-3 gap-6">
-              <KanbanColumn
-                title="A Fazer"
-                status="todo"
-                tasks={todoTasks}
-                count={todoTasks.length}
-              />
+              <KanbanColumn title="A Fazer" status="todo" tasks={todoTasks} count={todoTasks.length} />
 
               <KanbanColumn
                 title="Em Andamento"
@@ -1500,32 +1464,21 @@ const AllianzPlatform = () => {
               <table className="w-full">
                 <thead className="bg-gray-800">
                   <tr>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">
-                      Tarefa
-                    </th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">
-                      Cliente
-                    </th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Tarefa</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Cliente</th>
                     <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">
                       Responsável
                     </th>
                     <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">
                       Prioridade
                     </th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">
-                      Status
-                    </th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">
-                      Prazo
-                    </th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Status</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Prazo</th>
                   </tr>
                 </thead>
                 <tbody>
                   {tasks.map((task) => (
-                    <tr
-                      key={task.id}
-                      className="border-t border-gray-800 hover:bg-gray-800 transition"
-                    >
+                    <tr key={task.id} className="border-t border-gray-800 hover:bg-gray-800">
                       <td className="px-4 py-3 text-white">{task.title}</td>
                       <td className="px-4 py-3 text-gray-300">{task.clientName}</td>
                       <td className="px-4 py-3 text-gray-300">{task.assignedTo}</td>
@@ -1564,9 +1517,7 @@ const AllianzPlatform = () => {
                         </span>
                       </td>
                       <td className="px-4 py-3 text-gray-300">
-                        {task.dueDate
-                          ? new Date(task.dueDate).toLocaleDateString('pt-BR')
-                          : '-'}
+                        {task.dueDate ? new Date(task.dueDate).toLocaleDateString('pt-BR') : '-'}
                       </td>
                     </tr>
                   ))}
@@ -1617,9 +1568,7 @@ const AllianzPlatform = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Cliente *
-                    </label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Cliente *</label>
                     <select
                       value={newTask.clientId}
                       onChange={(e) => setNewTask({ ...newTask, clientId: e.target.value })}
@@ -1655,9 +1604,7 @@ const AllianzPlatform = () => {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">
-                      Prioridade
-                    </label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Prioridade</label>
                     <select
                       value={newTask.priority}
                       onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}
@@ -1705,9 +1652,9 @@ const AllianzPlatform = () => {
     );
   }
 
-  // ========================
+  // ===========================
   // CLIENT DASHBOARD
-  // ========================
+  // ===========================
   if (view === 'client-dashboard') {
     const clientPosts = posts.filter((p) => p.clientId === currentUser.id);
     const pendingPosts = clientPosts.filter((p) => p.status === 'pending');
@@ -1737,7 +1684,7 @@ const AllianzPlatform = () => {
           </div>
         </div>
 
-        {/* Content */}
+        {/* Conteúdo */}
         <div className="max-w-4xl mx-auto p-4">
           {pendingPosts.length > 0 && (
             <div
@@ -1759,7 +1706,22 @@ const AllianzPlatform = () => {
                 key={post.id}
                 className="bg-gray-900 rounded-xl shadow-md overflow-hidden border border-gray-800"
               >
-                <img src={post.image} alt="Post" className="w-full h-64 object-cover bg-gray-950" />
+                {/* Imagem clicável (abre em nova aba) */}
+                <div
+                  onClick={() => window.open(post.image, '_blank')}
+                  className="relative cursor-pointer group"
+                >
+                  <img
+                    src={post.image}
+                    alt="Post"
+                    className="w-full h-64 object-cover bg-gray-950 transition-transform duration-200 group-hover:scale-[1.01]"
+                  />
+                  <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
+                    <span className="text-sm text-white bg-black/60 px-3 py-1 rounded-lg">
+                      🔍 Clique para ver completo
+                    </span>
+                  </div>
+                </div>
 
                 <div className="p-4">
                   <div className="flex justify-between items-start mb-3">
@@ -1834,12 +1796,6 @@ const AllianzPlatform = () => {
                 </div>
               </div>
             ))}
-
-            {clientPosts.length === 0 && (
-              <p className="text-gray-400 text-sm">
-                Nenhum post enviado pela agência para aprovação ainda.
-              </p>
-            )}
           </div>
 
           {/* Métricas do cliente */}
@@ -1850,10 +1806,7 @@ const AllianzPlatform = () => {
             </h2>
 
             <div className="space-y-4">
-              <div
-                className="bg-gray-800 p-4 rounded-lg border-l-4"
-                style={{ borderLeftColor: '#ffa600' }}
-              >
+              <div className="bg-gray-800 p-4 rounded-lg border-l-4" style={{ borderLeftColor: '#ffa600' }}>
                 <h3 className="font-semibold text-white mb-3 flex items-center">
                   <Instagram className="mr-2" size={20} style={{ color: '#ffa600' }} />
                   Instagram Orgânico
@@ -1946,6 +1899,7 @@ const AllianzPlatform = () => {
     );
   }
 
+  // fallback
   return null;
 };
 
