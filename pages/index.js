@@ -1,5 +1,23 @@
 import { useState, useEffect } from 'react';
-import { Calendar, Clock, CheckCircle, XCircle, Upload, BarChart3, Users, Instagram, TrendingUp, Eye, MessageSquare, DollarSign, UserPlus, Plus, Edit, Trash2, Search, Filter, Tag, AlertCircle } from 'lucide-react';
+import {
+  Calendar,
+  Clock,
+  CheckCircle,
+  XCircle,
+  Upload,
+  BarChart3,
+  Users,
+  Instagram,
+  TrendingUp,
+  Eye,
+  MessageSquare,
+  DollarSign,
+  UserPlus,
+  Plus,
+  Edit,
+  Tag,
+  AlertCircle
+} from 'lucide-react';
 
 const AllianzPlatform = () => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -15,6 +33,7 @@ const AllianzPlatform = () => {
   const [showNewTaskModal, setShowNewTaskModal] = useState(false);
   const [taskView, setTaskView] = useState('kanban');
   const [draggedTask, setDraggedTask] = useState(null);
+
   const [newClient, setNewClient] = useState({
     name: '',
     businessName: '',
@@ -30,6 +49,7 @@ const AllianzPlatform = () => {
     instagram: '',
     password: ''
   });
+
   const [newTask, setNewTask] = useState({
     title: '',
     description: '',
@@ -41,10 +61,18 @@ const AllianzPlatform = () => {
     checklist: []
   });
 
+  // Usuários mockados
   const users = {
-    agency: { id: 1, email: 'agencia@allianz.com', password: '123', role: 'agency', name: 'Allianz Marketing' }
+    agency: {
+      id: 1,
+      email: 'agencia@allianz.com',
+      password: '123',
+      role: 'agency',
+      name: 'Allianz Marketing'
+    }
   };
 
+  // Serviços disponíveis
   const services = [
     'Gestão de Redes Sociais',
     'Tráfego Pago',
@@ -53,13 +81,10 @@ const AllianzPlatform = () => {
     'Desenvolvimento de Site'
   ];
 
-  const teamMembers = [
-    'Social Media 1',
-    'Social Media 2',
-    'Designer',
-    'Editor de Vídeos'
-  ];
+  // Equipe mockada
+  const teamMembers = ['Social Media 1', 'Social Media 2', 'Designer', 'Editor de Vídeos'];
 
+  // Posts mockados
   const mockPosts = [
     {
       id: 1,
@@ -85,6 +110,7 @@ const AllianzPlatform = () => {
     }
   ];
 
+  // Clientes mockados
   const mockClients = [
     {
       id: 2,
@@ -107,6 +133,7 @@ const AllianzPlatform = () => {
     }
   ];
 
+  // Tarefas mockadas
   const mockTasks = [
     {
       id: 1,
@@ -140,29 +167,83 @@ const AllianzPlatform = () => {
     }
   ];
 
+  // Carrega mocks ao iniciar
   useEffect(() => {
     setPosts(mockPosts);
     setClients(mockClients);
     setTasks(mockTasks);
   }, []);
 
+  // ========================
+  // LOGO COMPONENT
+  // ========================
   const Logo = () => (
     <svg className="h-8" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <path d="M15 5L25 35H20L18 28H12L10 35H5L15 5ZM15 12L13 23H17L15 12Z" fill="#ffa600"/>
-      <path d="M30 10H35V35H30V10Z" fill="#ffa600"/>
-      <path d="M40 10H45V35H40V10Z" fill="#ffa600"/>
-      <path d="M50 15C50 12 52 10 55 10C58 10 60 12 60 15V35H55V15H50V35H45V15C45 12 47 10 50 10Z" fill="#ffa600"/>
-      <path d="M65 28C65 31 67 33 70 33C73 33 75 31 75 28V17C75 14 73 12 70 12C67 12 65 14 65 17V28ZM60 28C60 34 64 38 70 38C76 38 80 34 80 28V17C80 11 76 7 70 7C64 7 60 11 60 17V28Z" fill="#ffa600"/>
-      <path d="M85 10H90V22L95 10H100L95 22L100 35H95L90 23V35H85V10Z" fill="#ffa600"/>
-      <path d="M105 35L115 10H110L107 20L104 10H99L109 35H105" fill="#ffa600"/>
+      <path d="M15 5L25 35H20L18 28H12L10 35H5L15 5ZM15 12L13 23H17L15 12Z" fill="#ffa600" />
+      <path d="M30 10H35V35H30V10Z" fill="#ffa600" />
+      <path d="M40 10H45V35H40V10Z" fill="#ffa600" />
+      <path
+        d="M50 15C50 12 52 10 55 10C58 10 60 12 60 15V35H55V15H50V35H45V15C45 12 47 10 50 10Z"
+        fill="#ffa600"
+      />
+      <path
+        d="M65 28C65 31 67 33 70 33C73 33 75 31 75 28V17C75 14 73 12 70 12C67 12 65 14 65 17V28ZM60 28C60 34 64 38 70 38C76 38 80 34 80 28V17C80 11 76 7 70 7C64 7 60 11 60 17V28Z"
+        fill="#ffa600"
+      />
+      <path
+        d="M85 10H90V22L95 10H100L95 22L100 35H95L90 23V35H85V10Z"
+        fill="#ffa600"
+      />
+      <path
+        d="M105 35L115 10H110L107 20L104 10H99L109 35H105"
+        fill="#ffa600"
+      />
     </svg>
   );
+
+  // ========================
+  // FUNÇÃO DE UPLOAD (Cloudinary)
+  // ========================
+  const handleUploadImage = async (file) => {
+    try {
+      const formData = new FormData();
+      // nome do campo: "file"
+      formData.append('file', file);
+      // preset que você criou no Cloudinary
+      formData.append('upload_preset', 'allianz_unsigned');
+      // opcional, mas vamos mandar também
+      formData.append('cloud_name', 'dbi6emnvr');
+
+      const res = await fetch('https://api.cloudinary.com/v1_1/dbi6emnvr/image/upload', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await res.json();
+
+      if (data.secure_url) {
+        return data.secure_url;
+      } else {
+        console.error('Erro ao enviar para Cloudinary:', data);
+        alert('Erro ao enviar imagem. Verifique o preset no Cloudinary.');
+        return null;
+      }
+    } catch (error) {
+      console.error('Erro no upload:', error);
+      alert('Falha ao enviar imagem para o servidor.');
+      return null;
+    }
+  };
+
+  // ========================
+  // LOGIN
+  // ========================
   const handleLogin = () => {
     if (loginEmail === users.agency.email && loginPassword === users.agency.password) {
       setCurrentUser(users.agency);
       setView('agency-dashboard');
     } else {
-      const client = clients.find(c => c.email === loginEmail && c.password === loginPassword);
+      const client = clients.find((c) => c.email === loginEmail && c.password === loginPassword);
       if (client) {
         setCurrentUser(client);
         setView('client-dashboard');
@@ -172,19 +253,27 @@ const AllianzPlatform = () => {
     }
   };
 
+  // ========================
+  // AÇÕES DE POST (cliente)
+  // ========================
   const handlePostAction = (postId, action, observation = null) => {
-    setPosts(posts.map(post => {
-      if (post.id === postId) {
-        if (action === 'approve') {
-          return { ...post, status: 'approved' };
-        } else if (action === 'revise') {
-          return { ...post, status: 'revision', observations: observation };
+    setPosts(
+      posts.map((post) => {
+        if (post.id === postId) {
+          if (action === 'approve') {
+            return { ...post, status: 'approved' };
+          } else if (action === 'revise') {
+            return { ...post, status: 'revision', observations: observation };
+          }
         }
-      }
-      return post;
-    }));
+        return post;
+      })
+    );
   };
 
+  // ========================
+  // CRIAR POST (agência)
+  // ========================
   const handleCreatePost = () => {
     if (!newPost.caption || !newPost.scheduledDate || !selectedClient) {
       alert('Preencha todos os campos');
@@ -196,7 +285,8 @@ const AllianzPlatform = () => {
       clientId: selectedClient.id,
       clientName: selectedClient.businessName,
       caption: newPost.caption,
-      image: 'https://via.placeholder.com/400x400/A8E6CF/ffffff?text=Novo+Post',
+      // se veio do cloudinary, usa. senão, usa placeholder
+      image: newPost.image || 'https://via.placeholder.com/400x400/A8E6CF/ffffff?text=Novo+Post',
       scheduledDate: newPost.scheduledDate,
       status: 'pending',
       createdAt: new Date().toISOString(),
@@ -208,6 +298,9 @@ const AllianzPlatform = () => {
     alert('Post enviado para aprovação! Notificação enviada ao cliente.');
   };
 
+  // ========================
+  // CRIAR CLIENTE
+  // ========================
   const handleCreateClient = () => {
     if (!newClient.name || !newClient.businessName || !newClient.email || !newClient.password) {
       alert('Preencha os campos obrigatórios');
@@ -223,7 +316,9 @@ const AllianzPlatform = () => {
     };
 
     setClients([...clients, client]);
-    alert(`Cliente cadastrado!\n\nCredenciais de acesso:\nEmail: ${newClient.email}\nSenha: ${newClient.password}`);
+    alert(
+      `Cliente cadastrado!\n\nCredenciais de acesso:\nEmail: ${newClient.email}\nSenha: ${newClient.password}`
+    );
     setShowNewClientModal(false);
     setNewClient({
       name: '',
@@ -242,13 +337,16 @@ const AllianzPlatform = () => {
     });
   };
 
+  // ========================
+  // CRIAR TAREFA
+  // ========================
   const handleCreateTask = () => {
     if (!newTask.title || !newTask.clientId || !newTask.assignedTo) {
       alert('Preencha os campos obrigatórios');
       return;
     }
 
-    const client = clients.find(c => c.id === parseInt(newTask.clientId));
+    const client = clients.find((c) => c.id === parseInt(newTask.clientId, 10));
     const task = {
       id: tasks.length + 1,
       ...newTask,
@@ -271,40 +369,46 @@ const AllianzPlatform = () => {
     });
   };
 
+  // ========================
+  // ATUALIZA STATUS DA TAREFA (kanban)
+  // ========================
   const updateTaskStatus = (taskId, newStatus) => {
-    setTasks(tasks.map(task =>
-      task.id === taskId ? { ...task, status: newStatus } : task
-    ));
+    setTasks(tasks.map((task) => (task.id === taskId ? { ...task, status: newStatus } : task)));
   };
 
+  // ========================
+  // TOGGLE CHECKLIST
+  // ========================
   const toggleChecklistItem = (taskId, checklistId) => {
-    setTasks(tasks.map(task => {
-      if (task.id === taskId) {
-        return {
-          ...task,
-          checklist: task.checklist.map(item =>
-            item.id === checklistId ? { ...item, completed: !item.completed } : item
-          )
-        };
-      }
-      return task;
-    }));
+    setTasks(
+      tasks.map((task) => {
+        if (task.id === taskId) {
+          return {
+            ...task,
+            checklist: task.checklist.map((item) =>
+              item.id === checklistId ? { ...item, completed: !item.completed } : item
+            )
+          };
+        }
+        return task;
+      })
+    );
   };
 
+  // ========================
   // LOGIN SCREEN
-if (view === 'login') {
-  return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4">
-      <div className="bg-gray-900 rounded-2xl shadow-2xl p-8 w-full max-w-md border border-gray-800">
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <a href="index.html" class="logo">
-                        <img src="logo.png" alt="Allianz Marketing Logo" class="logo-img">
-                    </a>
+  // ========================
+  if (view === 'login') {
+    return (
+      <div className="min-h-screen bg-black flex items-center justify-center p-4">
+        <div className="bg-gray-900 rounded-2xl shadow-2xl p-8 w-full max-w-md border border-gray-800">
+          <div className="text-center mb-8">
+            <div className="flex justify-center mb-4">
+              <Logo />
+            </div>
+            <h1 className="text-3xl font-bold text-white">Allianz Marketing</h1>
+            <p className="text-gray-400 mt-2">Gestão de Conteúdo e Campanhas</p>
           </div>
-          <h1 className="text-3xl font-bold text-white">Allianz Marketing</h1>
-          <p className="text-gray-400 mt-2">Gestão de Conteúdo e Campanhas</p>
-        </div>
 
           <div className="space-y-4">
             <div>
@@ -353,7 +457,9 @@ if (view === 'login') {
     );
   }
 
+  // ========================
   // AGENCY DASHBOARD
+  // ========================
   if (view === 'agency-dashboard') {
     return (
       <div className="min-h-screen bg-black">
@@ -423,28 +529,32 @@ if (view === 'login') {
             </h2>
 
             <div className="space-y-4">
+              {/* Cliente */}
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Cliente</label>
                 <select
                   value={selectedClient?.id || ''}
                   onChange={(e) => {
-                    const client = clients.find(c => c.id === parseInt(e.target.value));
-                    setSelectedClient(client);
+                    const client = clients.find((c) => c.id === parseInt(e.target.value, 10));
+                    setSelectedClient(client || null);
                   }}
                   className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                 >
                   <option value="">Selecione um cliente</option>
-                  {clients.map(client => (
-                    <option key={client.id} value={client.id}>{client.businessName}</option>
+                  {clients.map((client) => (
+                    <option key={client.id} value={client.id}>
+                      {client.businessName}
+                    </option>
                   ))}
                 </select>
               </div>
 
+              {/* Legenda */}
               <div>
                 <label className="block text-sm font-medium text-gray-300 mb-2">Legenda</label>
                 <textarea
                   value={newPost.caption}
-                  onChange={(e) => setNewPost({...newPost, caption: e.target.value})}
+                  onChange={(e) => setNewPost({ ...newPost, caption: e.target.value })}
                   className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                   rows="3"
                   placeholder="Escreva a legenda do post..."
@@ -452,23 +562,48 @@ if (view === 'login') {
               </div>
 
               <div className="grid grid-cols-2 gap-4">
+                {/* Data */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Data de Publicação</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Data de Publicação
+                  </label>
                   <input
                     type="date"
                     value={newPost.scheduledDate}
-                    onChange={(e) => setNewPost({...newPost, scheduledDate: e.target.value})}
+                    onChange={(e) => setNewPost({ ...newPost, scheduledDate: e.target.value })}
                     className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                   />
                 </div>
 
+                {/* Imagem */}
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">Imagem</label>
                   <input
                     type="file"
                     accept="image/*"
+                    onChange={async (e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const imageUrl = await handleUploadImage(file);
+                        if (imageUrl) {
+                          setNewPost((prev) => ({ ...prev, image: imageUrl }));
+                        }
+                      }
+                    }}
                     className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                   />
+
+                  {/* Preview */}
+                  {newPost.image && (
+                    <div className="mt-3">
+                      <p className="text-xs text-gray-400 mb-1">Pré-visualização:</p>
+                      <img
+                        src={newPost.image}
+                        alt="Prévia do post"
+                        className="w-32 h-32 object-cover rounded-lg border border-gray-700"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -487,10 +622,17 @@ if (view === 'login') {
             <h2 className="text-xl font-bold text-white mb-4">Posts Recentes</h2>
 
             <div className="space-y-4">
-              {posts.map(post => (
-                <div key={post.id} className="border border-gray-800 rounded-lg p-4 hover:shadow-md transition bg-gray-800">
+              {posts.map((post) => (
+                <div
+                  key={post.id}
+                  className="border border-gray-800 rounded-lg p-4 hover:shadow-md transition bg-gray-800"
+                >
                   <div className="flex gap-4">
-                    <img src={post.image} alt="Post" className="w-24 h-24 rounded-lg object-cover" />
+                    <img
+                      src={post.image}
+                      alt="Post"
+                      className="w-24 h-24 rounded-lg object-cover bg-gray-900"
+                    />
 
                     <div className="flex-1">
                       <div className="flex justify-between items-start mb-2">
@@ -499,16 +641,24 @@ if (view === 'login') {
                           <p className="text-sm text-gray-300">{post.caption}</p>
                         </div>
 
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          post.status === 'approved' ? 'bg-green-900 text-green-300' :
-                          post.status === 'pending' ? 'bg-yellow-900 text-yellow-300' :
-                          post.status === 'revision' ? 'bg-orange-900 text-orange-300' :
-                          'bg-red-900 text-red-300'
-                        }`}>
-                          {post.status === 'approved' ? 'Aprovado' :
-                           post.status === 'pending' ? 'Pendente' :
-                           post.status === 'revision' ? 'Em Revisão' :
-                           'Rejeitado'}
+                        <span
+                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                            post.status === 'approved'
+                              ? 'bg-green-900 text-green-300'
+                              : post.status === 'pending'
+                                ? 'bg-yellow-900 text-yellow-300'
+                                : post.status === 'revision'
+                                  ? 'bg-orange-900 text-orange-300'
+                                  : 'bg-red-900 text-red-300'
+                          }`}
+                        >
+                          {post.status === 'approved'
+                            ? 'Aprovado'
+                            : post.status === 'pending'
+                              ? 'Pendente'
+                              : post.status === 'revision'
+                                ? 'Em Revisão'
+                                : 'Rejeitado'}
                         </span>
                       </div>
 
@@ -524,7 +674,10 @@ if (view === 'login') {
                       </div>
 
                       {post.observations && (
-                        <div className="mt-2 p-2 bg-orange-900/30 border-l-4 rounded" style={{ borderColor: '#ffa600' }}>
+                        <div
+                          className="mt-2 p-2 bg-orange-900/30 border-l-4 rounded"
+                          style={{ borderColor: '#ffa600' }}
+                        >
                           <p className="text-sm" style={{ color: '#ffa600' }}>
                             <strong>Observações:</strong> {post.observations}
                           </p>
@@ -534,6 +687,9 @@ if (view === 'login') {
                   </div>
                 </div>
               ))}
+              {posts.length === 0 && (
+                <p className="text-gray-400 text-sm">Nenhum post criado ainda.</p>
+              )}
             </div>
           </div>
         </div>
@@ -541,7 +697,9 @@ if (view === 'login') {
     );
   }
 
+  // ========================
   // AGENCY METRICS
+  // ========================
   if (view === 'agency-metrics') {
     const mockMetrics = {
       instagram: { reach: 2803, profileVisits: 101, followers: 9, engagement: 4.2 },
@@ -550,6 +708,7 @@ if (view === 'login') {
 
     return (
       <div className="min-h-screen bg-black">
+        {/* Header */}
         <div className="bg-gray-900 text-white p-6 shadow-lg border-b border-gray-800">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
             <div className="flex items-center gap-3">
@@ -560,7 +719,11 @@ if (view === 'login') {
               </div>
             </div>
             <button
-              onClick={() => { setView('login'); setLoginEmail(''); setLoginPassword(''); }}
+              onClick={() => {
+                setView('login');
+                setLoginEmail('');
+                setLoginPassword('');
+              }}
               className="px-4 py-2 rounded-lg transition border border-gray-700 hover:bg-gray-800"
             >
               Sair
@@ -568,27 +731,52 @@ if (view === 'login') {
           </div>
         </div>
 
+        {/* Navigation */}
         <div className="bg-gray-900 border-b border-gray-800">
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex space-x-8">
-              <button onClick={() => setView('agency-dashboard')} className="py-4 text-gray-400 hover:text-white">Posts</button>
-              <button onClick={() => setView('agency-metrics')} className="py-4 border-b-2 text-white font-medium" style={{ borderColor: '#ffa600' }}>Métricas</button>
-              <button onClick={() => setView('agency-clients')} className="py-4 text-gray-400 hover:text-white">Clientes</button>
-              <button onClick={() => setView('agency-tasks')} className="py-4 text-gray-400 hover:text-white">Tarefas</button>
+              <button
+                onClick={() => setView('agency-dashboard')}
+                className="py-4 text-gray-400 hover:text-white"
+              >
+                Posts
+              </button>
+              <button
+                onClick={() => setView('agency-metrics')}
+                className="py-4 border-b-2 text-white font-medium"
+                style={{ borderColor: '#ffa600' }}
+              >
+                Métricas
+              </button>
+              <button
+                onClick={() => setView('agency-clients')}
+                className="py-4 text-gray-400 hover:text-white"
+              >
+                Clientes
+              </button>
+              <button
+                onClick={() => setView('agency-tasks')}
+                className="py-4 text-gray-400 hover:text-white"
+              >
+                Tarefas
+              </button>
             </div>
           </div>
         </div>
 
+        {/* Content */}
         <div className="max-w-7xl mx-auto p-6">
+          {/* Selecionar Cliente */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-300 mb-2">Selecionar Cliente</label>
             <select className="px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500">
-              {clients.map(client => (
+              {clients.map((client) => (
                 <option key={client.id}>{client.businessName}</option>
               ))}
             </select>
           </div>
 
+          {/* Instagram */}
           <div className="bg-gray-900 rounded-xl shadow-md p-6 mb-6 border border-gray-800">
             <h2 className="text-xl font-bold text-white mb-4 flex items-center">
               <Instagram className="mr-2" size={24} style={{ color: '#ffa600' }} />
@@ -601,7 +789,9 @@ if (view === 'login') {
                   <span className="text-sm text-gray-300">Alcance</span>
                   <Eye size={20} style={{ color: '#ffa600' }} />
                 </div>
-                <p className="text-2xl font-bold text-white">{mockMetrics.instagram.reach.toLocaleString('pt-BR')}</p>
+                <p className="text-2xl font-bold text-white">
+                  {mockMetrics.instagram.reach.toLocaleString('pt-BR')}
+                </p>
                 <p className="text-xs text-gray-400 mt-1">mil pessoas</p>
               </div>
 
@@ -619,7 +809,9 @@ if (view === 'login') {
                   <UserPlus size={20} style={{ color: '#ffa600' }} />
                 </div>
                 <p className="text-2xl font-bold text-white">+{mockMetrics.instagram.followers}</p>
-                <p className="text-xs text-gray-400 mt-1" style={{ color: '#ffa600' }}>↑ novos</p>
+                <p className="text-xs text-gray-400 mt-1" style={{ color: '#ffa600' }}>
+                  ↑ novos
+                </p>
               </div>
 
               <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
@@ -632,6 +824,7 @@ if (view === 'login') {
             </div>
           </div>
 
+          {/* Meta Ads */}
           <div className="bg-gray-900 rounded-xl shadow-md p-6 border border-gray-800">
             <h2 className="text-xl font-bold text-white mb-4 flex items-center">
               <BarChart3 className="mr-2" size={24} style={{ color: '#ffa600' }} />
@@ -644,7 +837,9 @@ if (view === 'login') {
                   <span className="text-sm text-gray-300">Investido</span>
                   <DollarSign size={20} style={{ color: '#ffa600' }} />
                 </div>
-                <p className="text-xl font-bold text-white">R$ {mockMetrics.metaAds.invested.toFixed(2)}</p>
+                <p className="text-xl font-bold text-white">
+                  R$ {mockMetrics.metaAds.invested.toFixed(2)}
+                </p>
               </div>
 
               <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
@@ -652,7 +847,9 @@ if (view === 'login') {
                   <span className="text-sm text-gray-300">Alcance</span>
                   <Eye size={20} style={{ color: '#ffa600' }} />
                 </div>
-                <p className="text-xl font-bold text-white">{mockMetrics.metaAds.reach.toLocaleString('pt-BR')}</p>
+                <p className="text-xl font-bold text-white">
+                  {mockMetrics.metaAds.reach.toLocaleString('pt-BR')}
+                </p>
               </div>
 
               <div className="bg-gray-800 p-4 rounded-lg border border-gray-700">
@@ -676,7 +873,9 @@ if (view === 'login') {
                   <span className="text-sm text-gray-300">Custo/Conversa</span>
                   <DollarSign size={20} style={{ color: '#ffa600' }} />
                 </div>
-                <p className="text-xl font-bold text-white">R$ {mockMetrics.metaAds.costPerConversation.toFixed(2)}</p>
+                <p className="text-xl font-bold text-white">
+                  R$ {mockMetrics.metaAds.costPerConversation.toFixed(2)}
+                </p>
               </div>
             </div>
           </div>
@@ -685,10 +884,13 @@ if (view === 'login') {
     );
   }
 
+  // ========================
   // AGENCY CLIENTS
+  // ========================
   if (view === 'agency-clients') {
     return (
       <div className="min-h-screen bg-black">
+        {/* Header */}
         <div className="bg-gray-900 text-white p-6 shadow-lg border-b border-gray-800">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
             <div className="flex items-center gap-3">
@@ -699,7 +901,11 @@ if (view === 'login') {
               </div>
             </div>
             <button
-              onClick={() => { setView('login'); setLoginEmail(''); setLoginPassword(''); }}
+              onClick={() => {
+                setView('login');
+                setLoginEmail('');
+                setLoginPassword('');
+              }}
               className="px-4 py-2 rounded-lg transition border border-gray-700 hover:bg-gray-800"
             >
               Sair
@@ -707,17 +913,40 @@ if (view === 'login') {
           </div>
         </div>
 
+        {/* Navigation */}
         <div className="bg-gray-900 border-b border-gray-800">
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex space-x-8">
-              <button onClick={() => setView('agency-dashboard')} className="py-4 text-gray-400 hover:text-white">Posts</button>
-              <button onClick={() => setView('agency-metrics')} className="py-4 text-gray-400 hover:text-white">Métricas</button>
-              <button onClick={() => setView('agency-clients')} className="py-4 border-b-2 text-white font-medium" style={{ borderColor: '#ffa600' }}>Clientes</button>
-              <button onClick={() => setView('agency-tasks')} className="py-4 text-gray-400 hover:text-white">Tarefas</button>
+              <button
+                onClick={() => setView('agency-dashboard')}
+                className="py-4 text-gray-400 hover:text-white"
+              >
+                Posts
+              </button>
+              <button
+                onClick={() => setView('agency-metrics')}
+                className="py-4 text-gray-400 hover:text-white"
+              >
+                Métricas
+              </button>
+              <button
+                onClick={() => setView('agency-clients')}
+                className="py-4 border-b-2 text-white font-medium"
+                style={{ borderColor: '#ffa600' }}
+              >
+                Clientes
+              </button>
+              <button
+                onClick={() => setView('agency-tasks')}
+                className="py-4 text-gray-400 hover:text-white"
+              >
+                Tarefas
+              </button>
             </div>
           </div>
         </div>
 
+        {/* Content */}
         <div className="max-w-7xl mx-auto p-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-2xl font-bold text-white">Clientes ({clients.length})</h2>
@@ -732,7 +961,7 @@ if (view === 'login') {
           </div>
 
           <div className="grid gap-4">
-            {clients.map(client => (
+            {clients.map((client) => (
               <div key={client.id} className="bg-gray-900 rounded-xl p-6 border border-gray-800">
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
@@ -779,6 +1008,9 @@ if (view === 'login') {
                 </div>
               </div>
             ))}
+            {clients.length === 0 && (
+              <p className="text-gray-400 text-sm">Nenhum cliente cadastrado ainda.</p>
+            )}
           </div>
         </div>
 
@@ -799,22 +1031,28 @@ if (view === 'login') {
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Nome do Responsável *</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Nome do Responsável *
+                    </label>
                     <input
                       type="text"
                       value={newClient.name}
-                      onChange={(e) => setNewClient({...newClient, name: e.target.value})}
+                      onChange={(e) => setNewClient({ ...newClient, name: e.target.value })}
                       className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                       placeholder="João Silva"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Nome da Empresa *</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Nome da Empresa *
+                    </label>
                     <input
                       type="text"
                       value={newClient.businessName}
-                      onChange={(e) => setNewClient({...newClient, businessName: e.target.value})}
+                      onChange={(e) =>
+                        setNewClient({ ...newClient, businessName: e.target.value })
+                      }
                       className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                       placeholder="Loja ABC"
                     />
@@ -823,22 +1061,26 @@ if (view === 'login') {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Email *</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Email *
+                    </label>
                     <input
                       type="email"
                       value={newClient.email}
-                      onChange={(e) => setNewClient({...newClient, email: e.target.value})}
+                      onChange={(e) => setNewClient({ ...newClient, email: e.target.value })}
                       className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                       placeholder="cliente@email.com"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Senha de Acesso *</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Senha de Acesso *
+                    </label>
                     <input
                       type="text"
                       value={newClient.password}
-                      onChange={(e) => setNewClient({...newClient, password: e.target.value})}
+                      onChange={(e) => setNewClient({ ...newClient, password: e.target.value })}
                       className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                       placeholder="Digite a senha"
                     />
@@ -847,11 +1089,13 @@ if (view === 'login') {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Telefone/WhatsApp</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Telefone/WhatsApp
+                    </label>
                     <input
                       type="text"
                       value={newClient.phone}
-                      onChange={(e) => setNewClient({...newClient, phone: e.target.value})}
+                      onChange={(e) => setNewClient({ ...newClient, phone: e.target.value })}
                       className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                       placeholder="(11) 98765-4321"
                     />
@@ -862,7 +1106,7 @@ if (view === 'login') {
                     <input
                       type="text"
                       value={newClient.cnpj}
-                      onChange={(e) => setNewClient({...newClient, cnpj: e.target.value})}
+                      onChange={(e) => setNewClient({ ...newClient, cnpj: e.target.value })}
                       className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                       placeholder="00.000.000/0001-00"
                     />
@@ -874,25 +1118,36 @@ if (view === 'login') {
                   <input
                     type="text"
                     value={newClient.segment}
-                    onChange={(e) => setNewClient({...newClient, segment: e.target.value})}
+                    onChange={(e) => setNewClient({ ...newClient, segment: e.target.value })}
                     className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                     placeholder="E-commerce, Serviços, etc"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Serviços Contratados</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Serviços Contratados
+                  </label>
                   <div className="grid grid-cols-2 gap-2">
-                    {services.map(service => (
-                      <label key={service} className="flex items-center gap-2 text-gray-300 cursor-pointer">
+                    {services.map((service) => (
+                      <label
+                        key={service}
+                        className="flex items-center gap-2 text-gray-300 cursor-pointer"
+                      >
                         <input
                           type="checkbox"
                           checked={newClient.services.includes(service)}
                           onChange={(e) => {
                             if (e.target.checked) {
-                              setNewClient({...newClient, services: [...newClient.services, service]});
+                              setNewClient({
+                                ...newClient,
+                                services: [...newClient.services, service]
+                              });
                             } else {
-                              setNewClient({...newClient, services: newClient.services.filter(s => s !== service)});
+                              setNewClient({
+                                ...newClient,
+                                services: newClient.services.filter((s) => s !== service)
+                              });
                             }
                           }}
                           className="w-4 h-4"
@@ -905,32 +1160,38 @@ if (view === 'login') {
 
                 <div className="grid grid-cols-3 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Início do Contrato</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Início do Contrato
+                    </label>
                     <input
                       type="date"
                       value={newClient.contractStart}
-                      onChange={(e) => setNewClient({...newClient, contractStart: e.target.value})}
+                      onChange={(e) => setNewClient({ ...newClient, contractStart: e.target.value })}
                       className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Valor Mensal (R$)</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Valor Mensal (R$)
+                    </label>
                     <input
                       type="number"
                       value={newClient.monthlyValue}
-                      onChange={(e) => setNewClient({...newClient, monthlyValue: e.target.value})}
+                      onChange={(e) => setNewClient({ ...newClient, monthlyValue: e.target.value })}
                       className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                       placeholder="2500"
                     />
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Dia de Pagamento</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Dia de Pagamento
+                    </label>
                     <input
                       type="number"
                       value={newClient.paymentDay}
-                      onChange={(e) => setNewClient({...newClient, paymentDay: e.target.value})}
+                      onChange={(e) => setNewClient({ ...newClient, paymentDay: e.target.value })}
                       className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                       placeholder="10"
                       min="1"
@@ -944,17 +1205,19 @@ if (view === 'login') {
                   <input
                     type="text"
                     value={newClient.instagram}
-                    onChange={(e) => setNewClient({...newClient, instagram: e.target.value})}
+                    onChange={(e) => setNewClient({ ...newClient, instagram: e.target.value })}
                     className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                     placeholder="@empresa"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Objetivos/Metas</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Objetivos/Metas
+                  </label>
                   <textarea
                     value={newClient.goals}
-                    onChange={(e) => setNewClient({...newClient, goals: e.target.value})}
+                    onChange={(e) => setNewClient({ ...newClient, goals: e.target.value })}
                     className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                     rows="3"
                     placeholder="Descreva os objetivos do cliente..."
@@ -984,15 +1247,17 @@ if (view === 'login') {
     );
   }
 
+  // ========================
   // AGENCY TASKS
+  // ========================
   if (view === 'agency-tasks') {
-    const todoTasks = tasks.filter(t => t.status === 'todo');
-    const doingTasks = tasks.filter(t => t.status === 'doing');
-    const doneTasks = tasks.filter(t => t.status === 'done');
+    const todoTasks = tasks.filter((t) => t.status === 'todo');
+    const doingTasks = tasks.filter((t) => t.status === 'doing');
+    const doneTasks = tasks.filter((t) => t.status === 'done');
 
     const TaskCard = ({ task }) => {
       const isOverdue = new Date(task.dueDate) < new Date() && task.status !== 'done';
-      const completedItems = task.checklist.filter(item => item.completed).length;
+      const completedItems = task.checklist.filter((item) => item.completed).length;
 
       return (
         <div
@@ -1008,18 +1273,24 @@ if (view === 'login') {
         >
           <div className="flex justify-between items-start mb-2">
             <h3 className="font-semibold text-white text-sm">{task.title}</h3>
-            <span className={`px-2 py-1 rounded text-xs font-semibold ${
-              task.priority === 'high' ? 'bg-red-900 text-red-300' :
-              task.priority === 'medium' ? 'bg-yellow-900 text-yellow-300' :
-              'bg-blue-900 text-blue-300'
-            }`}>
-              {task.priority === 'high' ? 'Alta' : task.priority === 'medium' ? 'Média' : 'Baixa'}
+            <span
+              className={`px-2 py-1 rounded text-xs font-semibold ${
+                task.priority === 'high'
+                  ? 'bg-red-900 text-red-300'
+                  : task.priority === 'medium'
+                    ? 'bg-yellow-900 text-yellow-300'
+                    : 'bg-blue-900 text-blue-300'
+              }`}
+            >
+              {task.priority === 'high'
+                ? 'Alta'
+                : task.priority === 'medium'
+                  ? 'Média'
+                  : 'Baixa'}
             </span>
           </div>
 
-          {task.description && (
-            <p className="text-xs text-gray-400 mb-3">{task.description}</p>
-          )}
+          {task.description && <p className="text-xs text-gray-400 mb-3">{task.description}</p>}
 
           <div className="space-y-2 text-xs text-gray-400">
             <div className="flex items-center gap-2">
@@ -1043,7 +1314,9 @@ if (view === 'login') {
             <div className="mt-3 pt-3 border-t border-gray-700">
               <div className="flex items-center justify-between text-xs">
                 <span className="text-gray-400">Progresso</span>
-                <span style={{ color: '#ffa600' }}>{completedItems}/{task.checklist.length}</span>
+                <span style={{ color: '#ffa600' }}>
+                  {completedItems}/{task.checklist.length}
+                </span>
               </div>
               <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
                 <div
@@ -1093,7 +1366,7 @@ if (view === 'login') {
               setDraggedTask(null);
             }}
           >
-            {tasks.map(task => (
+            {tasks.map((task) => (
               <TaskCard key={task.id} task={task} />
             ))}
           </div>
@@ -1103,6 +1376,7 @@ if (view === 'login') {
 
     return (
       <div className="min-h-screen bg-black">
+        {/* Header */}
         <div className="bg-gray-900 text-white p-6 shadow-lg border-b border-gray-800">
           <div className="max-w-7xl mx-auto flex justify-between items-center">
             <div className="flex items-center gap-3">
@@ -1113,7 +1387,11 @@ if (view === 'login') {
               </div>
             </div>
             <button
-              onClick={() => { setView('login'); setLoginEmail(''); setLoginPassword(''); }}
+              onClick={() => {
+                setView('login');
+                setLoginEmail('');
+                setLoginPassword('');
+              }}
               className="px-4 py-2 rounded-lg transition border border-gray-700 hover:bg-gray-800"
             >
               Sair
@@ -1121,17 +1399,40 @@ if (view === 'login') {
           </div>
         </div>
 
+        {/* Navigation */}
         <div className="bg-gray-900 border-b border-gray-800">
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex space-x-8">
-              <button onClick={() => setView('agency-dashboard')} className="py-4 text-gray-400 hover:text-white">Posts</button>
-              <button onClick={() => setView('agency-metrics')} className="py-4 text-gray-400 hover:text-white">Métricas</button>
-              <button onClick={() => setView('agency-clients')} className="py-4 text-gray-400 hover:text-white">Clientes</button>
-              <button onClick={() => setView('agency-tasks')} className="py-4 border-b-2 text-white font-medium" style={{ borderColor: '#ffa600' }}>Tarefas</button>
+              <button
+                onClick={() => setView('agency-dashboard')}
+                className="py-4 text-gray-400 hover:text-white"
+              >
+                Posts
+              </button>
+              <button
+                onClick={() => setView('agency-metrics')}
+                className="py-4 text-gray-400 hover:text-white"
+              >
+                Métricas
+              </button>
+              <button
+                onClick={() => setView('agency-clients')}
+                className="py-4 text-gray-400 hover:text-white"
+              >
+                Clientes
+              </button>
+              <button
+                onClick={() => setView('agency-tasks')}
+                className="py-4 border-b-2 text-white font-medium"
+                style={{ borderColor: '#ffa600' }}
+              >
+                Tarefas
+              </button>
             </div>
           </div>
         </div>
 
+        {/* Content */}
         <div className="max-w-7xl mx-auto p-6">
           <div className="flex justify-between items-center mb-6">
             <div className="flex gap-4">
@@ -1199,39 +1500,74 @@ if (view === 'login') {
               <table className="w-full">
                 <thead className="bg-gray-800">
                   <tr>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Tarefa</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Cliente</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Responsável</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Prioridade</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Status</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">Prazo</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">
+                      Tarefa
+                    </th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">
+                      Cliente
+                    </th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">
+                      Responsável
+                    </th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">
+                      Prioridade
+                    </th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">
+                      Status
+                    </th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-300">
+                      Prazo
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {tasks.map(task => (
-                    <tr key={task.id} className="border-t border-gray-800 hover:bg-gray-800">
+                  {tasks.map((task) => (
+                    <tr
+                      key={task.id}
+                      className="border-t border-gray-800 hover:bg-gray-800 transition"
+                    >
                       <td className="px-4 py-3 text-white">{task.title}</td>
                       <td className="px-4 py-3 text-gray-300">{task.clientName}</td>
                       <td className="px-4 py-3 text-gray-300">{task.assignedTo}</td>
                       <td className="px-4 py-3">
-                        <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                          task.priority === 'high' ? 'bg-red-900 text-red-300' :
-                          task.priority === 'medium' ? 'bg-yellow-900 text-yellow-300' :
-                          'bg-blue-900 text-blue-300'
-                        }`}>
-                          {task.priority === 'high' ? 'Alta' : task.priority === 'medium' ? 'Média' : 'Baixa'}
+                        <span
+                          className={`px-2 py-1 rounded text-xs font-semibold ${
+                            task.priority === 'high'
+                              ? 'bg-red-900 text-red-300'
+                              : task.priority === 'medium'
+                                ? 'bg-yellow-900 text-yellow-300'
+                                : 'bg-blue-900 text-blue-300'
+                          }`}
+                        >
+                          {task.priority === 'high'
+                            ? 'Alta'
+                            : task.priority === 'medium'
+                              ? 'Média'
+                              : 'Baixa'}
                         </span>
                       </td>
                       <td className="px-4 py-3">
-                        <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                          task.status === 'done' ? 'bg-green-900 text-green-300' :
-                          task.status === 'doing' ? 'bg-orange-900 text-orange-300' :
-                          'bg-gray-700 text-gray-300'
-                        }`}>
-                          {task.status === 'done' ? 'Concluído' : task.status === 'doing' ? 'Andamento' : 'A Fazer'}
+                        <span
+                          className={`px-2 py-1 rounded text-xs font-semibold ${
+                            task.status === 'done'
+                              ? 'bg-green-900 text-green-300'
+                              : task.status === 'doing'
+                                ? 'bg-orange-900 text-orange-300'
+                                : 'bg-gray-700 text-gray-300'
+                          }`}
+                        >
+                          {task.status === 'done'
+                            ? 'Concluído'
+                            : task.status === 'doing'
+                              ? 'Andamento'
+                              : 'A Fazer'}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-gray-300">{new Date(task.dueDate).toLocaleDateString('pt-BR')}</td>
+                      <td className="px-4 py-3 text-gray-300">
+                        {task.dueDate
+                          ? new Date(task.dueDate).toLocaleDateString('pt-BR')
+                          : '-'}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -1256,11 +1592,13 @@ if (view === 'login') {
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Título da Tarefa *</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Título da Tarefa *
+                  </label>
                   <input
                     type="text"
                     value={newTask.title}
-                    onChange={(e) => setNewTask({...newTask, title: e.target.value})}
+                    onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
                     className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                     placeholder="Ex: Criar 5 posts para cliente X"
                   />
@@ -1270,7 +1608,7 @@ if (view === 'login') {
                   <label className="block text-sm font-medium text-gray-300 mb-2">Descrição</label>
                   <textarea
                     value={newTask.description}
-                    onChange={(e) => setNewTask({...newTask, description: e.target.value})}
+                    onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
                     className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                     rows="3"
                     placeholder="Descreva os detalhes da tarefa..."
@@ -1279,29 +1617,37 @@ if (view === 'login') {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Cliente *</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Cliente *
+                    </label>
                     <select
                       value={newTask.clientId}
-                      onChange={(e) => setNewTask({...newTask, clientId: e.target.value})}
+                      onChange={(e) => setNewTask({ ...newTask, clientId: e.target.value })}
                       className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                     >
                       <option value="">Selecione</option>
-                      {clients.map(client => (
-                        <option key={client.id} value={client.id}>{client.businessName}</option>
+                      {clients.map((client) => (
+                        <option key={client.id} value={client.id}>
+                          {client.businessName}
+                        </option>
                       ))}
                     </select>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Responsável *</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Responsável *
+                    </label>
                     <select
                       value={newTask.assignedTo}
-                      onChange={(e) => setNewTask({...newTask, assignedTo: e.target.value})}
+                      onChange={(e) => setNewTask({ ...newTask, assignedTo: e.target.value })}
                       className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                     >
                       <option value="">Selecione</option>
-                      {teamMembers.map(member => (
-                        <option key={member} value={member}>{member}</option>
+                      {teamMembers.map((member) => (
+                        <option key={member} value={member}>
+                          {member}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -1309,10 +1655,12 @@ if (view === 'login') {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Prioridade</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Prioridade
+                    </label>
                     <select
                       value={newTask.priority}
-                      onChange={(e) => setNewTask({...newTask, priority: e.target.value})}
+                      onChange={(e) => setNewTask({ ...newTask, priority: e.target.value })}
                       className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                     >
                       <option value="low">Baixa</option>
@@ -1322,11 +1670,13 @@ if (view === 'login') {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-300 mb-2">Data de Vencimento</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">
+                      Data de Vencimento
+                    </label>
                     <input
                       type="date"
                       value={newTask.dueDate}
-                      onChange={(e) => setNewTask({...newTask, dueDate: e.target.value})}
+                      onChange={(e) => setNewTask({ ...newTask, dueDate: e.target.value })}
                       className="w-full px-4 py-2 bg-gray-800 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-orange-500"
                     />
                   </div>
@@ -1355,13 +1705,16 @@ if (view === 'login') {
     );
   }
 
+  // ========================
   // CLIENT DASHBOARD
+  // ========================
   if (view === 'client-dashboard') {
-    const clientPosts = posts.filter(p => p.clientId === currentUser.id);
-    const pendingPosts = clientPosts.filter(p => p.status === 'pending');
+    const clientPosts = posts.filter((p) => p.clientId === currentUser.id);
+    const pendingPosts = clientPosts.filter((p) => p.status === 'pending');
 
     return (
       <div className="min-h-screen bg-black">
+        {/* Header */}
         <div className="bg-gray-900 text-white p-6 shadow-lg border-b border-gray-800">
           <div className="max-w-4xl mx-auto flex justify-between items-center">
             <div className="flex items-center gap-3">
@@ -1384,9 +1737,13 @@ if (view === 'login') {
           </div>
         </div>
 
+        {/* Content */}
         <div className="max-w-4xl mx-auto p-4">
           {pendingPosts.length > 0 && (
-            <div className="bg-gray-900 border-l-4 p-4 mb-6 rounded-lg border border-gray-800" style={{ borderLeftColor: '#ffa600' }}>
+            <div
+              className="bg-gray-900 border-l-4 p-4 mb-6 rounded-lg border border-gray-800"
+              style={{ borderLeftColor: '#ffa600' }}
+            >
               <div className="flex items-center">
                 <Clock className="mr-2" size={20} style={{ color: '#ffa600' }} />
                 <p className="font-semibold text-white">
@@ -1397,9 +1754,12 @@ if (view === 'login') {
           )}
 
           <div className="space-y-4">
-            {clientPosts.map(post => (
-              <div key={post.id} className="bg-gray-900 rounded-xl shadow-md overflow-hidden border border-gray-800">
-                <img src={post.image} alt="Post" className="w-full h-64 object-cover" />
+            {clientPosts.map((post) => (
+              <div
+                key={post.id}
+                className="bg-gray-900 rounded-xl shadow-md overflow-hidden border border-gray-800"
+              >
+                <img src={post.image} alt="Post" className="w-full h-64 object-cover bg-gray-950" />
 
                 <div className="p-4">
                   <div className="flex justify-between items-start mb-3">
@@ -1411,16 +1771,24 @@ if (view === 'login') {
                       </div>
                     </div>
 
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      post.status === 'approved' ? 'bg-green-900 text-green-300' :
-                      post.status === 'pending' ? 'bg-yellow-900 text-yellow-300' :
-                      post.status === 'revision' ? 'bg-orange-900 text-orange-300' :
-                      'bg-red-900 text-red-300'
-                    }`}>
-                      {post.status === 'approved' ? 'Aprovado' :
-                       post.status === 'pending' ? 'Pendente' :
-                       post.status === 'revision' ? 'Em Revisão' :
-                       'Rejeitado'}
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        post.status === 'approved'
+                          ? 'bg-green-900 text-green-300'
+                          : post.status === 'pending'
+                            ? 'bg-yellow-900 text-yellow-300'
+                            : post.status === 'revision'
+                              ? 'bg-orange-900 text-orange-300'
+                              : 'bg-red-900 text-red-300'
+                      }`}
+                    >
+                      {post.status === 'approved'
+                        ? 'Aprovado'
+                        : post.status === 'pending'
+                          ? 'Pendente'
+                          : post.status === 'revision'
+                            ? 'Em Revisão'
+                            : 'Rejeitado'}
                     </span>
                   </div>
 
@@ -1458,15 +1826,23 @@ if (view === 'login') {
                     <div className="mt-4 pt-4 border-t border-gray-800 bg-gray-800 p-3 rounded-lg">
                       <p className="text-sm flex items-center" style={{ color: '#ffa600' }}>
                         <CheckCircle className="mr-2" size={18} />
-                        Este post será publicado automaticamente no Instagram em {new Date(post.scheduledDate).toLocaleDateString('pt-BR')}
+                        Este post será publicado automaticamente no Instagram em{' '}
+                        {new Date(post.scheduledDate).toLocaleDateString('pt-BR')}
                       </p>
                     </div>
                   )}
                 </div>
               </div>
             ))}
+
+            {clientPosts.length === 0 && (
+              <p className="text-gray-400 text-sm">
+                Nenhum post enviado pela agência para aprovação ainda.
+              </p>
+            )}
           </div>
 
+          {/* Métricas do cliente */}
           <div className="mt-6 bg-gray-900 rounded-xl shadow-md p-6 border border-gray-800">
             <h2 className="text-xl font-bold text-white mb-4 flex items-center">
               <BarChart3 className="mr-2" size={24} style={{ color: '#ffa600' }} />
@@ -1474,7 +1850,10 @@ if (view === 'login') {
             </h2>
 
             <div className="space-y-4">
-              <div className="bg-gray-800 p-4 rounded-lg border-l-4" style={{ borderLeftColor: '#ffa600' }}>
+              <div
+                className="bg-gray-800 p-4 rounded-lg border-l-4"
+                style={{ borderLeftColor: '#ffa600' }}
+              >
                 <h3 className="font-semibold text-white mb-3 flex items-center">
                   <Instagram className="mr-2" size={20} style={{ color: '#ffa600' }} />
                   Instagram Orgânico
@@ -1548,11 +1927,15 @@ if (view === 'login') {
                   </div>
                   <div>
                     <p className="text-xs text-gray-400 mb-1">ROI Estimado</p>
-                    <p className="text-xl font-bold" style={{ color: '#ffa600' }}>+342%</p>
+                    <p className="text-xl font-bold" style={{ color: '#ffa600' }}>
+                      +342%
+                    </p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-400 mb-1">Crescimento</p>
-                    <p className="text-xl font-bold" style={{ color: '#ffa600' }}>+23%</p>
+                    <p className="text-xl font-bold" style={{ color: '#ffa600' }}>
+                      +23%
+                    </p>
                   </div>
                 </div>
               </div>
