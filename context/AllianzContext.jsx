@@ -90,26 +90,27 @@ export const AllianzProvider = ({ children }) => {
   // LOCAL STORAGE
   // -------------------------
   useEffect(() => {
-    const storedClients = JSON.parse(localStorage.getItem("clients"));
-    const storedPosts = JSON.parse(localStorage.getItem("posts"));
-    const storedTasks = JSON.parse(localStorage.getItem("tasks"));
+  const fetchInitialData = async () => {
+    try {
+      // 🔹 Carrega os CLIENTES do banco MongoDB
+      const resClients = await fetch("/api/clients");
+      if (!resClients.ok) throw new Error("Erro ao buscar clientes");
+      const clientsData = await resClients.json();
 
-    setClients(storedClients || mockClients);
-    setPosts(storedPosts || mockPosts);
-    setTasks(storedTasks || mockTasks);
-  }, []);
+      // 🔹 Mantém posts e tasks do localStorage (por enquanto)
+      const storedPosts = JSON.parse(localStorage.getItem("posts"));
+      const storedTasks = JSON.parse(localStorage.getItem("tasks"));
 
-  useEffect(() => {
-    localStorage.setItem("clients", JSON.stringify(clients));
-  }, [clients]);
+      setClients(clientsData || []);
+      setPosts(storedPosts || mockPosts);
+      setTasks(storedTasks || mockTasks);
+    } catch (error) {
+      console.error("Erro ao carregar dados iniciais:", error);
+    }
+  };
 
-  useEffect(() => {
-    localStorage.setItem("posts", JSON.stringify(posts));
-  }, [posts]);
-
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
+  fetchInitialData();
+}, []);
 
   // -------------------------
   // LOGIN
