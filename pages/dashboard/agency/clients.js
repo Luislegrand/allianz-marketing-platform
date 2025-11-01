@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { Plus, XCircle, Edit } from 'lucide-react'
 import Header from '../../../components/Header'
 import Footer from '../../../components/Footer'
+import { useAllianz } from '../../../context/AllianzContext'
 
 const services = [
   'Gestão de Redes Sociais',
@@ -14,8 +15,7 @@ const services = [
 
 export default function AgencyClients() {
   const router = useRouter()
-  const [clients, setClients] = useState([])
-  const [loading, setLoading] = useState(true)
+  const { clients, handleCreateClient } = useAllianz()
   const [showModal, setShowModal] = useState(false)
   const [newClient, setNewClient] = useState({
     name: '',
@@ -33,91 +33,28 @@ export default function AgencyClients() {
     password: ''
   })
 
-  // BUSCAR CLIENTES DO MONGODB
-  useEffect(() => {
-    fetchClients()
-  }, [])
-
-  const fetchClients = async () => {
-    try {
-      console.log('🔄 Buscando clientes...')
-      const response = await fetch('/api/clients')
-      
-      if (!response.ok) {
-        throw new Error(`Erro na API: ${response.status}`)
-      }
-      
-      const data = await response.json()
-      console.log('✅ Clientes recebidos:', data)
-      setClients(data)
-    } catch (error) {
-      console.error('❌ Erro ao buscar clientes:', error)
-      alert('Erro ao carregar clientes. Veja o console.')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  // CRIAR NOVO CLIENTE NO MONGODB
-  const onSubmit = async () => {
+  const onSubmit = () => {
     if (!newClient.name || !newClient.businessName || !newClient.email || !newClient.password) {
       alert('Preencha os campos obrigatórios')
       return
     }
-
-    try {
-      console.log('📤 Enviando novo cliente:', newClient)
-
-      const response = await fetch('/api/clients', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newClient)
-      })
-
-      if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || 'Erro ao criar cliente')
-      }
-
-      const result = await response.json()
-      console.log('✅ Cliente criado:', result)
-
-      alert('Cliente cadastrado com sucesso!')
-      
-      // Recarregar lista de clientes
-      await fetchClients()
-      
-      // Fechar modal e limpar form
-      setShowModal(false)
-      setNewClient({
-        name: '',
-        businessName: '',
-        email: '',
-        phone: '',
-        cnpj: '',
-        segment: '',
-        services: [],
-        contractStart: '',
-        monthlyValue: '',
-        paymentDay: '',
-        goals: '',
-        instagram: '',
-        password: ''
-      })
-    } catch (error) {
-      console.error('❌ Erro ao criar cliente:', error)
-      alert('Erro ao cadastrar cliente: ' + error.message)
-    }
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <p className="text-white text-xl">Carregando clientes...</p>
-      </div>
-    )
+    handleCreateClient(newClient)
+    setShowModal(false)
+    setNewClient({
+      name: '',
+      businessName: '',
+      email: '',
+      phone: '',
+      cnpj: '',
+      segment: '',
+      services: [],
+      contractStart: '',
+      monthlyValue: '',
+      paymentDay: '',
+      goals: '',
+      instagram: '',
+      password: ''
+    })
   }
 
   return (
@@ -161,7 +98,7 @@ export default function AgencyClients() {
 
         <div className="grid gap-4">
           {clients.map((client) => (
-            <div key={client._id} className="bg-gray-900 rounded-xl p-6 border border-gray-800">
+            <div key={client.id} className="bg-gray-900 rounded-xl p-6 border border-gray-800">
               <div className="flex justify-between items-start">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
@@ -182,19 +119,19 @@ export default function AgencyClients() {
                     </div>
                     <div>
                       <p className="text-gray-400">Telefone</p>
-                      <p className="text-white">{client.phone || '-'}</p>
+                      <p className="text-white">{client.phone}</p>
                     </div>
                     <div>
                       <p className="text-gray-400">Instagram</p>
-                      <p className="text-white">{client.instagram || '-'}</p>
+                      <p className="text-white">{client.instagram}</p>
                     </div>
                     <div>
                       <p className="text-gray-400">Serviços</p>
-                      <p className="text-white">{client.services?.join(', ') || '-'}</p>
+                      <p className="text-white">{client.services?.join(', ')}</p>
                     </div>
                     <div>
                       <p className="text-gray-400">Valor Mensal</p>
-                      <p className="text-white">R$ {client.monthlyValue || '-'}</p>
+                      <p className="text-white">R$ {client.monthlyValue}</p>
                     </div>
                   </div>
                 </div>
