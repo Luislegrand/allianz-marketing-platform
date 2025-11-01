@@ -216,7 +216,6 @@ const handleCreateClient = (client) => {
   setClients([...clients, newClient]);
 };
 
-
   // -------------------------
   // TAREFAS
   // -------------------------
