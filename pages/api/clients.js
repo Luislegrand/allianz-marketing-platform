@@ -1,6 +1,4 @@
-import clientPromise from "../../../lib/mongodb";
-
-console.log("✅ API /api/clients carregada na Vercel!");
+import clientPromise from "../../lib/mongodb";
 
 export default async function handler(req, res) {
   try {
