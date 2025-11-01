@@ -31,27 +31,6 @@ export const AllianzProvider = ({ children }) => {
     },
   };
 
-  const mockClients = [
-    {
-      id: 2,
-      name: "João Silva",
-      businessName: "Loja XYZ",
-      email: "cliente1@email.com",
-      password: "123",
-      phone: "(11) 98765-4321",
-      cnpj: "12.345.678/0001-90",
-      segment: "E-commerce",
-      services: ["Gestão de Redes Sociais", "Tráfego Pago"],
-      contractStart: "2025-01-15",
-      monthlyValue: "2500",
-      paymentDay: "10",
-      goals: "Aumentar vendas em 30% nos próximos 3 meses",
-      instagram: "@lojaxyz",
-      status: "active",
-      createdAt: "2025-01-15",
-    },
-  ];
-
   const mockPosts = [
     {
       id: 1,
@@ -87,41 +66,69 @@ export const AllianzProvider = ({ children }) => {
   ];
 
   // -------------------------
-  // LOCAL STORAGE
+  // CARREGAR DADOS INICIAIS
   // -------------------------
   useEffect(() => {
-  const fetchInitialData = async () => {
-    try {
-      // 🔹 Carrega os CLIENTES do banco MongoDB
-      const resClients = await fetch("/api/clients");
-      if (!resClients.ok) throw new Error("Erro ao buscar clientes");
-      const clientsData = await resClients.json(); // ← aqui precisa do await ✅
+    const fetchInitialData = async () => {
+      try {
+        console.log("🔄 Carregando dados iniciais...");
 
-      // 🔹 Mantém posts e tasks do localStorage (por enquanto)
-      const storedPosts = JSON.parse(localStorage.getItem("posts"));
-      const storedTasks = JSON.parse(localStorage.getItem("tasks"));
+        // 🔹 Carrega CLIENTES do MongoDB
+        const resClients = await fetch("/api/clients");
+        if (!resClients.ok) {
+          throw new Error(`Erro ao buscar clientes: ${resClients.status}`);
+        }
+        const clientsData = await resClients.json();
+        console.log("✅ Clientes carregados do MongoDB:", clientsData.length);
 
-      setClients(clientsData || []);  // ← garante que só seta se houver dados
-      setPosts(storedPosts || mockPosts);
-      setTasks(storedTasks || mockTasks);
-    } catch (error) {
-      console.error("Erro ao carregar dados iniciais:", error);
+        // 🔹 Mantém posts e tasks do localStorage (por enquanto)
+        const storedPosts = localStorage.getItem("posts");
+        const storedTasks = localStorage.getItem("tasks");
+
+        setClients(clientsData || []);
+        setPosts(storedPosts ? JSON.parse(storedPosts) : mockPosts);
+        setTasks(storedTasks ? JSON.parse(storedTasks) : mockTasks);
+
+        console.log("✅ Dados iniciais carregados com sucesso!");
+      } catch (error) {
+        console.error("❌ Erro ao carregar dados iniciais:", error);
+        // Em caso de erro, usa dados mockados
+        setClients([]);
+        setPosts(mockPosts);
+        setTasks(mockTasks);
+      }
+    };
+
+    fetchInitialData();
+  }, []);
+
+  // -------------------------
+  // SALVAR NO LOCALSTORAGE
+  // -------------------------
+  useEffect(() => {
+    if (posts.length > 0) {
+      localStorage.setItem("posts", JSON.stringify(posts));
     }
-  };
+  }, [posts]);
 
-  fetchInitialData();
-}, []);
-
+  useEffect(() => {
+    if (tasks.length > 0) {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+    }
+  }, [tasks]);
 
   // -------------------------
   // LOGIN
   // -------------------------
   const handleLogin = (email, password) => {
+    // Login da agência
     if (email === users.agency.email && password === users.agency.password) {
       setCurrentUser(users.agency);
       setView("agency-dashboard");
       return true;
     }
+
+    // Login do cliente
     const client = clients.find(
       (c) => c.email === email && c.password === password
     );
@@ -130,6 +137,7 @@ export const AllianzProvider = ({ children }) => {
       setView("client-dashboard");
       return true;
     }
+
     return false;
   };
 
@@ -170,7 +178,7 @@ export const AllianzProvider = ({ children }) => {
   const handleCreatePost = (newPost, selectedClient) => {
     const post = {
       id: posts.length + 1,
-      clientId: selectedClient.id,
+      clientId: selectedClient._id || selectedClient.id,
       clientName: selectedClient.businessName,
       caption: newPost.caption,
       image:
@@ -198,33 +206,44 @@ export const AllianzProvider = ({ children }) => {
     );
   };
 
-// -------------------------
-// CLIENTES
-// -------------------------
-const handleCreateClient = async (newClient) => {
-  try {
-    const res = await fetch("/api/clients", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newClient),
-    });
+  // -------------------------
+  // CLIENTES
+  // -------------------------
+  const handleCreateClient = async (newClient) => {
+    try {
+      console.log("📤 Criando cliente no MongoDB:", newClient);
 
-    if (!res.ok) {
-      throw new Error("Erro ao salvar no banco de dados");
+      const res = await fetch("/api/clients", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newClient),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Erro ao salvar no banco de dados");
+      }
+
+      const savedClient = await res.json();
+      console.log("✅ Cliente criado com sucesso:", savedClient);
+
+      // Atualiza o estado com o novo cliente
+      setClients((prev) => [...prev, savedClient]);
+
+      return savedClient;
+    } catch (error) {
+      console.error("❌ Erro ao criar cliente:", error);
+      throw error;
     }
-
-    const savedClient = await res.json();
-    setClients((prev) => [...prev, savedClient]);
-  } catch (error) {
-    console.error("Erro ao criar cliente:", error);
-  }
-};
+  };
 
   // -------------------------
   // TAREFAS
   // -------------------------
   const handleCreateTask = (task) => {
-    const client = clients.find((c) => c.id === parseInt(task.clientId, 10));
+    const client = clients.find(
+      (c) => c._id === task.clientId || c.id === parseInt(task.clientId, 10)
+    );
     const newTask = {
       id: tasks.length + 1,
       ...task,
