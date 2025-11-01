@@ -1,11 +1,11 @@
 import clientPromise from "../../../lib/mongodb";
 
 export default async function handler(req, res) {
-  const client = await clientPromise;
-  const db = client.db("allianz");
-  const collection = db.collection("clients");
-
   try {
+    const client = await clientPromise;
+    const db = client.db("allianz");
+    const collection = db.collection("clients");
+
     if (req.method === "GET") {
       const clients = await collection.find({}).toArray();
       return res.status(200).json(clients);
@@ -34,7 +34,7 @@ export default async function handler(req, res) {
 
     return res.status(405).json({ error: "Método não permitido" });
   } catch (error) {
-    console.error("Erro ao acessar MongoDB:", error);
-    return res.status(500).json({ error: "Erro interno no servidor" });
+    console.error("Erro no handler /api/clients:", error);
+    res.status(500).json({ error: "Erro interno no servidor" });
   }
 }
