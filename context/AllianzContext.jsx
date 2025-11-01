@@ -196,22 +196,26 @@ export const AllianzProvider = ({ children }) => {
     );
   };
 
-  // -------------------------
-  // CLIENTES
-  // -------------------------
+// -------------------------
+// CLIENTES
+// -------------------------
+const handleCreateClient = (client) => {
   const newClient = {
-  id: clients.length + 2,
-  ...client,
-  role: "client",
-  status: "active",
-  createdAt: new Date().toISOString(),
-  metrics: {
-    reach: 0,
-    profileVisits: 0,
-    followers: 0,
-    campaigns: 0,
-  },
+    id: clients.length + 2,
+    ...client,
+    role: "client",
+    status: "active",
+    createdAt: new Date().toISOString(),
+    metrics: {
+      reach: 0,
+      profileVisits: 0,
+      followers: 0,
+      campaigns: 0,
+    },
+  };
+  setClients([...clients, newClient]);
 };
+
 
   // -------------------------
   // TAREFAS
