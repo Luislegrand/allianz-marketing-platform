@@ -95,13 +95,13 @@ export const AllianzProvider = ({ children }) => {
       // 🔹 Carrega os CLIENTES do banco MongoDB
       const resClients = await fetch("/api/clients");
       if (!resClients.ok) throw new Error("Erro ao buscar clientes");
-      const clientsData = await resClients.json();
+      const clientsData = await resClients.json(); // ← aqui precisa do await ✅
 
       // 🔹 Mantém posts e tasks do localStorage (por enquanto)
       const storedPosts = JSON.parse(localStorage.getItem("posts"));
       const storedTasks = JSON.parse(localStorage.getItem("tasks"));
 
-      setClients(clientsData || []);
+      setClients(clientsData || []);  // ← garante que só seta se houver dados
       setPosts(storedPosts || mockPosts);
       setTasks(storedTasks || mockTasks);
     } catch (error) {
@@ -111,6 +111,7 @@ export const AllianzProvider = ({ children }) => {
 
   fetchInitialData();
 }, []);
+
 
   // -------------------------
   // LOGIN
