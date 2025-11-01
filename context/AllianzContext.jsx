@@ -199,7 +199,7 @@ export const AllianzProvider = ({ children }) => {
   // -------------------------
   // CLIENTES
   // -------------------------
-  cconst newClient = {
+  const newClient = {
   id: clients.length + 2,
   ...client,
   role: "client",
