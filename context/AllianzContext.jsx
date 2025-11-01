@@ -199,21 +199,23 @@ export const AllianzProvider = ({ children }) => {
 // -------------------------
 // CLIENTES
 // -------------------------
-const handleCreateClient = (client) => {
-  const newClient = {
-    id: clients.length + 2,
-    ...client,
-    role: "client",
-    status: "active",
-    createdAt: new Date().toISOString(),
-    metrics: {
-      reach: 0,
-      profileVisits: 0,
-      followers: 0,
-      campaigns: 0,
-    },
-  };
-  setClients([...clients, newClient]);
+const handleCreateClient = async (newClient) => {
+  try {
+    const res = await fetch("/api/clients", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newClient),
+    });
+
+    if (!res.ok) {
+      throw new Error("Erro ao salvar no banco de dados");
+    }
+
+    const savedClient = await res.json();
+    setClients((prev) => [...prev, savedClient]);
+  } catch (error) {
+    console.error("Erro ao criar cliente:", error);
+  }
 };
 
   // -------------------------
